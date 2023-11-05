@@ -30,7 +30,9 @@ db.collectionName.drop()
 
 To show all the collections in the current db:
 
-show collections - 
+```js
+show collections
+```
 
 ---
 
