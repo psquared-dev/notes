@@ -1,13 +1,30 @@
-show dbs - to list all the dbs
+to list all the dbs
+
+```js
+show dbs
+```
 
 ---
 
-db.createCollection("name") - to create the collection, the second parameter is used to sepcify configs for e.g capped settings or schema
+To create the collection, the second parameter is used to sepcify configs for e.g capped settings or schema
+
+```js
+db.createCollection("name")
+```
 
 ---
 
-db.drop() - to drop the database
-db.collectionName.drop() - to drop the collection
+To drop the database
+
+```js
+db.drop()
+```
+
+to drop the collection
+
+```js
+db.collectionName.drop()
+```
 
 ---
 
@@ -244,3 +261,21 @@ db.posts.getIndexes() to get the current indexes
 db.student.find().explain("executionStats") - to get query stats, executionStats.totalDocsExamined returns the docs needed to examied to return the result.
 
 db.student.createIndex({firstName: 1}) - create a new index for firstName on asc order. If you now query on firstName, executionStats.totalDocsExamined should return 1.
+
+## Aggregate
+
+```js
+db.persons.aggregate([
+    {$match: {gender: "female"} },
+    {$group: {_id: {state: "$location.state"}, totalPerson: {$sum: 1} }},
+    {$sort: {totalPerson: -1}}
+]);
+```
+
+Projection:
+
+```js
+db.persons.aggregate([
+    {$project: {_id: 0, gender: 1, fullName: {$concat: [ { $toUpper: "$name.first" }," ", "$name.last"]} }}
+])
+```
