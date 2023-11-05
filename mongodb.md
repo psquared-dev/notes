@@ -1,4 +1,4 @@
-to list all the dbs
+To list all the dbs:
 
 ```js
 show dbs
@@ -6,7 +6,7 @@ show dbs
 
 ---
 
-To create the collection, the second parameter is used to sepcify configs for e.g capped settings or schema
+To create the collection, the second parameter is used to sepcify configs for e.g capped settings or schema:
 
 ```js
 db.createCollection("name")
@@ -14,13 +14,13 @@ db.createCollection("name")
 
 ---
 
-To drop the database
+To drop the database:
 
 ```js
 db.drop()
 ```
 
-to drop the collection
+To drop the collection:
 
 ```js
 db.collectionName.drop()
@@ -28,21 +28,29 @@ db.collectionName.drop()
 
 ---
 
-show collections - to show all the collections in the current db
+To show all the collections in the current db:
+
+show collections - 
 
 ---
 
-db.collectionName.stats() - to view the stats like total size of collection, index size etc
+To view the stats like total size of collection, index size etc
+
+```js
+db.collectionName.stats()
+```
 
 ## ObjectId
 
-ObjectId values are 12 bytes of length
+`ObjectId` values are 12 bytes of length
 
 - first 4 bytes seconds since unix epoch
 - next 5 bytes are a random number
 - last 3 bytes are random counter number
 
-ObjectId("652bf764fdcc4a468d11146c").getTimestamp() - to get the associated timestamp
+`ObjectId("652bf764fdcc4a468d11146c").getTimestamp()` - to get the associated timestamp
+
+----
 
 ## insertOne() and insertMany()
 
