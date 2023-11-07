@@ -40,6 +40,8 @@ Creates a container from budybox image and runs it in interactive mode.
 docker run -it busybox
 ```
 
+`docker run` command composed to two commands `docker create` + `docker start`;
+
 to stop the running container:
 
 ```bash
@@ -94,6 +96,12 @@ The above command is equivalent to the following:
 
 ```bash
 docker ps -aq | xargs docker rm
+```
+
+To remove all the cache and nerworks, use the following commands:
+
+```bash
+docker system prune
 ```
 
 To specify the command to run when the container starts, this overrides the default command
