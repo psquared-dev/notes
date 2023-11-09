@@ -202,3 +202,43 @@ CMD ["npm", "start"]
 Note when we specify working directory, any commands executed with the `docker exec` command will be from the same working directory.
 
 
+## docker compose
+
+Running two or more contains using docker compose command is tedios. Further, to connect two contains we have to manually setup networking using the docker commands. This is where `docker compose` comes into the play. `docker compose` makes it easier two run two or more contains and automaticallt setup networking between them. 
+
+To use `docker compose` file we have to create `docker-compose.yml` file.
+
+here is the sample `docker-compos.yml` file:
+
+```yaml
+version: '3'
+
+services:
+  redis-server:
+    image: 'redis'
+  node-app:
+    restart: on-failure
+    build: .
+    ports:
+      - "8081:8081"
+```
+
+[here](https://github.com/psquared-dev/docker-compose-example) is the sample project that uses this `docker-compise.yml` file.
+
+`docker compose up` - is used to run (or build, if not already done) the contains
+`docker compose up -d` - lauches the containers in background
+`docker compose up --builds` - build and then run the containers
+`docker compose down` -  stop all the containers.
+
+Make sure to run these where in the same directory as `docker-compose.yml` file.
+
+The following are restart policies:
+
+"on"  --> this is the default
+always
+on-failure
+unless-stopped
+
+We can check the status of the running containers using the following command:
+
+`docker compose ps`
