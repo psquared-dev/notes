@@ -182,5 +182,23 @@ We can specify an alternate name for the Dockerfile using the --file option.
 docker build -t first-image -f mydocker .
 ```
 
+## Sample Docker File
+
+```dockerfile
+# Specify a base image
+FROM node:14-alpine
+
+WORKDIR /usr/app
+
+# Install some depenendencies
+COPY ./package.json ./
+RUN npm install
+COPY ./ ./
+
+# Default command
+CMD ["npm", "start"]
+```
+
+Note when we specify working directory, any commands executed with the `docker exec` command will be from the same working directory.
 
 
