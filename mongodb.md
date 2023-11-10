@@ -56,16 +56,20 @@ db.collectionName.stats()
 
 ## insertOne() and insertMany()
 
+```js
 db.collectionName.insertOne(doc) - to insert the doc into the collection
 db.collectionName.insertMany([doc1, doc2, doc3]) - to insertan array of docs into the collection
+```
 
-There also exists a method called `insert()` which can be used to insert one or more docs, however, it is now deprecated. An importnt difference between `insert()` and other methods is that, `insert()` doesn't return the `_id` after inserting the docs into the database.
+There also exists a method called `insert()` which can be used to insert one or more docs, however, it is now deprecated. An important difference between `insert()` and other methods is that, `insert()` doesn't return the `_id` after inserting the docs into the database.
 
 ## Changing the behavior of insertOne() and insertMany()
 
 Consider the following command:
 
+```js
 db.hobbies.insertMany([ {_id: "yoga", name: "Yoga"}, {_id: "cooking", name: "Cooking"}, {_id: "hiking", name: "Hiking"}, ]).
+```
 
 Assuming `_id : cooking` already exists the db, the above query would insert the doc `{_id: "yoga", name: "Yoga"}` and then throws and error without entering any other doc in the command.
 
@@ -84,12 +88,12 @@ db.hobbies.insertMany(
 
 Now all the docs with duplicate IDs are skipped but the remaining docs are inserted into the db.
 
-writeConcern
+**writeConcern**
 
-{w: 0} - don't wait for server acknowledgement.
-{w: 1, j: undefined} - report success only when db has acknowledged and without writing it to the journal, because there is not entry in the journal, you could loose data.
-{w: 1, j: true} - report success only when db has acknowledged and data has been written in the journal.
-{w: 1, j : true, wtimeout: 5000} - report success only when db has acknowledged, data has been written in the journal and timout is less than 5s.
+`{w: 0}` - don't wait for server acknowledgement.
+`{w: 1, j: undefined}` - report success only when db has acknowledged and without writing it to the journal, because there is not entry in the journal, you could loose data.
+`{w: 1, j: true}` - report success only when db has acknowledged and data has been written in the journal.
+`{w: 1, j : true, wtimeout: 5000}` - report success only when db has acknowledged, data has been written in the journal and timout is less than 5s.
 
 Here is how to specify these options:
 
@@ -110,57 +114,69 @@ MongoDB CRUD operations are atomic at the document level.
 
 ## Importing data
 
+```bash
 mongoimport -d dbname -c collection --jsonArray --drop
+```
 
---jsonArray - option tells mongoimport there are multiple docs in the file. By default it looks for one.
---drop - drop the collection it if already exists
+* `--jsonArray -` option tells mongoimport there are multiple docs in the file. By default it looks for one.
+* `--drop` - drop the collection it if already exists
 
 ## findOne() and find()
 
-findOne() works same as find()
+`findOne()`` works same as `find()`
 
 find(<query>, <projection>)
 
-db.posts.find({"author.name": "Emily Watson"}) - where author is an object with name property
-db.posts.find({tags: "coding"}) - where tags is an array of strings
-db.posts.find({tags: {$in: ["programming", "money"]}}) - where tags is an array of string, find all the docs where tags contains "programming" and "money"
-db.posts.find({tags: {$nin: ["programming", "money"]}}) - above line complement
-db.posts.find({comments: {$gt: 0}}) - find all docs where comments are greater than 0
-db.posts.find({ $and: [{ comments: { $gt: 0 } }, { comments: { $lt: 5 } }] }) - find all docs where comment is greater than 0 but less than 5
+`db.posts.find({"author.name": "Emily Watson"})` - where author is an object with name property
+`db.posts.find({tags: "coding"})` - where tags is an array of strings
+`db.posts.find({tags: {$in: ["programming", "money"]}})` - where tags is an array of string, find all the docs where tags contains "programming" and "money"
+`db.posts.find({tags: {$nin: ["programming", "money"]}})` - above line complement
+`db.posts.find({comments: {$gt: 0}})` - find all docs where comments are greater than 0
+`db.posts.find({ $and: [{ comments: { $gt: 0 } }, { comments: { $lt: 5 } }] })` - find all docs where comment is greater than 0 but less than 5
 
-db.posts.find({shared: {$exists: false}}) - find all the docs where the shared property doesn't exists
+`db.posts.find({shared: {$exists: false}})` - find all the docs where the shared property doesn't exists
 
+```js
 db.getCollection("movies").find(
 {genres: {$type: "array"} },
 {genres: 1}
 )
+```
 
 Find all docs where type of `genres` field is an array.
 
+```js
 db.getCollection("movies").find(
 {summary: {$regex: /\d{4}/} },
 {summary: 1}
 )
+```
 
 Find all docs where type of summary contains a 4 digit number.
 
+```js
 db.getCollection("movies").find(
 {genres: {$size: 2} },
 {genres: 1}
 )
+```
 
 Find all docs where size of `genres` array is 2
 
+```js
 db.getCollection("movies").find(
 {genres: {$all: ["Drama", "Romance"]} },.
 {genres: 1}
 )
+```
 
 Find all docs where `genres` array consists of "Drama" and "Romance". Note that order of "Drama" and "Romance" doesn't matter here.
 
+```js
 db.users.find({
 hobbies: {$elemMatch: {title: "Sports", frequency: {$gte: 3}}}
 })
+```
 
 Find all docs where hobbies (an array fo objects) contains an object with `title: sports` and frequency >= 3. Note that elemMatch performs the matching in the same document (i.e. title and frequency must be present in the same document).
 
@@ -190,16 +206,16 @@ db.getCollection("movies").find({
 });
 ```
 
-find() method returns a cursor. We can use the forEach loop on cursor to iterate through the object. Cursor object has many other helper methods. For e.g:
+`find()`` method returns a cursor. We can use the forEach loop on cursor to iterate through the object. Cursor object has many other helper methods. For e.g:
 
-cursor.count() total count of records
-cursor.next() to get the next document, if any
-cursor.hasNext() to check whether the next document exist or not
+`cursor.count()` total count of records
+`cursor.next()` to get the next document, if any
+`cursor.hasNext()` to check whether the next document exist or not
 
-db.posts.find().limit(5) - get five documents only
-db.posts.find().skip(2) - returns all docs except the first 2
-db.posts.find().sort({comments: -1}) - sort by comments in asc order, for asc use 1
-db.posts.find().skip(2).limit(5).sort({comments: -1}) - sorts all the docs in desc order, return the 5 docs skipping the first 2. Note that here sorting is applied first before skip(). The limit() is applied at last.
+`db.posts.find().limit(5)` - get five documents only
+`db.posts.find().skip(2)` - returns all docs except the first 2
+`db.posts.find().sort({comments: -1})` - sort by comments in asc order, for asc use 1
+`db.posts.find().skip(2).limit(5).sort({comments: -1})` - sorts all the docs in desc order, return the 5 docs skipping the first 2. Note that here sorting is applied first before `skip()`. The `limit()` is applied at last.
 
 All Query Operators - https://www.mongodb.com/docs/manual/reference/operator/query/
 
@@ -213,48 +229,62 @@ Here `network` is an embedded docuemnt, this would return all the docs with fiel
 
 ## updateOne() and updateMany()
 
+```js
 updateOne(<query>, <update>, <options>)
 updateMany(<query>, <update>, <options>)
+```
 
+```js
 db.posts.updateOne(
 {postId: 2618},
 {$set: {shared: true}},
 )
+```
 
 update the shared key of doc with postId 2618 to true
 
+```js
 db.posts.updateOne(
 {postId: 2618},
 {$unset: {shared: 1}},
 )
+```
 
 remove the shared property from the doc with postId 2618
 
+```js
 db.posts.updateOne(
 {postId: 8451},
 {$inc: {comments: 2}},
 )
+```
 
 increment the comments property by 2 of doc with postId 8451
 
+```js
 db.posts.updateOne(
 {postId: 3511},
 {$pull: {tags: "programming"}},
 )
+```
 
-remove the string programming from the tags array
+remove the string programming from the `tags` array
 
+```js
 db.posts.updateOne(
 {postId: 3511},
 {$push: {tags: "programming"}},
 )
+```
 
-append the string programming to the tags array
+append the string programming to the `tags` array
 
 ## deleteOne() and deleteMany()
 
+```js
 deleteOne(<query>)
 deleteMany(<query>)
+```
 
 ## aggregation
 
@@ -266,11 +296,11 @@ group by nickname
 
 ## index
 
-db.posts.getIndexes() to get the current indexes
+`db.posts.getIndexes()` to get the current indexes
 
-db.student.find().explain("executionStats") - to get query stats, executionStats.totalDocsExamined returns the docs needed to examied to return the result.
+`db.student.find().explain("executionStats")` - to get query stats, executionStats.totalDocsExamined returns the docs needed to examied to return the result.
 
-db.student.createIndex({firstName: 1}) - create a new index for firstName on asc order. If you now query on firstName, executionStats.totalDocsExamined should return 1.
+`db.student.createIndex({firstName: 1})` - create a new index for `firstName` on `asc` order. If you now query on `firstName`, `executionStats.totalDocsExamined` should return `1`.
 
 ## Aggregate
 
