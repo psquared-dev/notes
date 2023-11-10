@@ -127,9 +127,9 @@ mongoimport -d dbname -c collection --jsonArray --drop
 
 ## findOne() and find()
 
-`findOne()`` works same as `find()`
+`findOne()` works same as `find()`
 
-find(<query>, <projection>)
+Syntax: `find(<query>, <projection>)`
 
 * `db.posts.find({"author.name": "Emily Watson"})` - where author is an object with name property
 * `db.posts.find({tags: "coding"})` - where tags is an array of strings
