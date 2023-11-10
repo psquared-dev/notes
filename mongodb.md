@@ -131,14 +131,14 @@ mongoimport -d dbname -c collection --jsonArray --drop
 
 find(<query>, <projection>)
 
-`db.posts.find({"author.name": "Emily Watson"})` - where author is an object with name property
-`db.posts.find({tags: "coding"})` - where tags is an array of strings
-`db.posts.find({tags: {$in: ["programming", "money"]}})` - where tags is an array of string, find all the docs where tags contains "programming" and "money"
-`db.posts.find({tags: {$nin: ["programming", "money"]}})` - above line complement
-`db.posts.find({comments: {$gt: 0}})` - find all docs where comments are greater than 0
-`db.posts.find({ $and: [{ comments: { $gt: 0 } }, { comments: { $lt: 5 } }] })` - find all docs where comment is greater than 0 but less than 5
+* `db.posts.find({"author.name": "Emily Watson"})` - where author is an object with name property
+* `db.posts.find({tags: "coding"})` - where tags is an array of strings
+* `db.posts.find({tags: {$in: ["programming", "money"]}})` - where tags is an array of string, find all the docs where tags contains "programming" and "money"
+* `db.posts.find({tags: {$nin: ["programming", "money"]}})` - above line complement
+* `db.posts.find({comments: {$gt: 0}})` - find all docs where comments are greater than 0
+* `db.posts.find({ $and: [{ comments: { $gt: 0 } }, { comments: { $lt: 5 } }] })` - find all docs where comment is greater than 0 but less than 5
 
-`db.posts.find({shared: {$exists: false}})` - find all the docs where the shared property doesn't exists
+* `db.posts.find({shared: {$exists: false}})` - find all the docs where the shared property doesn't exists
 
 ```js
 db.getCollection("movies").find(
