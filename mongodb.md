@@ -68,7 +68,11 @@ There also exists a method called `insert()` which can be used to insert one or 
 Consider the following command:
 
 ```js
-db.hobbies.insertMany([ {_id: "yoga", name: "Yoga"}, {_id: "cooking", name: "Cooking"}, {_id: "hiking", name: "Hiking"}, ]).
+db.hobbies.insertMany([
+{ _id: "yoga", name: "Yoga" }, 
+{ _id: "cooking", name: "Cooking" }, 
+{ _id: "hiking", name: "Hiking" },
+])
 ```
 
 Assuming `_id : cooking` already exists the db, the above query would insert the doc `{_id: "yoga", name: "Yoga"}` and then throws and error without entering any other doc in the command.
