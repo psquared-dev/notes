@@ -242,3 +242,13 @@ unless-stopped
 We can check the status of the running containers using the following command:
 
 `docker compose ps`
+
+## Docker with React
+
+[Here](https://github.com/psquared-dev/react-docker-example) is a sample project on how to use docker with react.
+
+```bash
+docker run -it -v /app/node_modules -v $PWD:/app -p 3000:80 tracker_prod
+```
+
+`-v /app/node_modules` option removes the `/app/node_modules` directory from mapping.
