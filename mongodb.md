@@ -140,6 +140,8 @@ Syntax: `find(<query>, <projection>)`
 
 * `db.posts.find({shared: {$exists: false}})` - find all the docs where the shared property doesn't exists
 
+* `db.posts.find({shared: {$exists: true, $ne: null}})` - find all the docs where the shared property exists and is equal to `null`.
+
 ```js
 db.getCollection("movies").find(
 {genres: {$type: "array"} },
@@ -182,7 +184,7 @@ hobbies: {$elemMatch: {title: "Sports", frequency: {$gte: 3}}}
 })
 ```
 
-Find all docs where hobbies (an array fo objects) contains an object with `title: sports` and frequency >= 3. Note that elemMatch performs the matching in the same document (i.e. title and frequency must be present in the same document).
+Find all docs where hobbies (an array fo objects) contains an object with `title: sports` and frequency >= 3. Note that elemMatch performs the matching in the same document (i.e. title and frequency must be present in the same document). The `$elemMatch` describes how a single operator object looks like.
 
 Note:
 
@@ -208,6 +210,34 @@ Our intent was to find all docs with geners horror and fantasy. But the above qu
 db.getCollection("movies").find({
   $and: [{ genres: "Horror", genres: "Fantasy" }, { genres: 1 }],
 });
+```
+
+```js
+db.getCollection("movies").find(
+   {$expr: {$gt: ["$runtime", "$rating.average"]}}
+)
+```
+
+Find all the docs where `runtime` is greater than the `rating.average`.
+
+Intead of hardcoding the fields in the array can build them dynamically as follows:
+
+```js
+db.getCollection("movies").find(
+   {$expr: {$gt: 
+           [
+               {
+                   $cond: { 
+                       if: {$gte: ["$volume", 90] }, 
+                       then: {$subtact: ["$volume", 10]},
+                       else: "$volume"
+                   }
+               },
+               "$target"
+           ] 
+       }
+   }
+)
 ```
 
 `find()`` method returns a cursor. We can use the forEach loop on cursor to iterate through the object. Cursor object has many other helper methods. For e.g:
