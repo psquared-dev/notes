@@ -1,0 +1,48 @@
+class --> blue print
+
+Object --> Instance 
+
+Creation of Object --> Instantiation
+
+new --> used to create object
+
+Object --> Memory allocated inside Heap area
+
+Instance variable --
+  -> Created directly within a class
+  -> Memory allocated inside heap(Within object)
+  -> Default values are assigned
+  -> Can be acccessed any where within class also outside class using obj ref if not private
+  -> 
+
+Local Variables --
+ -> Created inside class within a method or loop or a block or constructor
+ -> Memory is alloacted inside stack area
+ -> Default values are not assigned 
+ -> Can be accessed only withina method or block where ever they are defined. Scope is local
+
+---------------------------------------------------------------------------------------
+-->If we create object/instance memory is alloacted in Heap area.
+-->If there is no refrence referring to object inside heap area then Garbage collector would collect the object
+(In other words object memory is de allocated)
+
+--> When ever we call a method or a block to execute then one stack will be created within stack atrea
+---> when ever that method body or block body execution is over that stack will be deallocated from stack area
+ 
+We can write methods in Java in four diffrent ways based on needs refer class board notes for same;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

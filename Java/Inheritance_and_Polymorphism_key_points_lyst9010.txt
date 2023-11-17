@@ -1,0 +1,102 @@
+Inheritance refers to process of one class aquiring properties(fields) and behavior of another class.
+
+It also refers to writing program as a hierarchy classes rather than single class.
+
+Inheritance can be achieved using "extends" keyword.
+
+Parent class == Super class == Base class
+
+Child class == Sub class == Derived class
+
+Using Inheritance we can achive Is-A relationship
+
+-->Contructor donot participate in inheirtance but they get executed bcz of super() in child class Constructor.
+
+--->Private properties/members of  a class does not participate in Inheritance. However other protected, default and public member do participate in Inheritance.
+
+--> Multilevel inheirtance is permitted in Java.
+
+--> Multiple Inheritance is not alllowed in Java as it will lead to ambiguity to compiler.
+
+   (It also refer to Diamond shaped problem)
+
+--> Object class is parent of all classes in Java.
+
+
+=================================================================================
+Inherited methods --> Such methods which are inherited in the child class from parent and used as it;s in child class without modification.
+
+Overridden methods --> Such methods which are inherited in child class from parent class and are modified in the child class to meet it's requirement or as per the demand in child class
+
+Specialized method --> Such methods which are present only in the child class and are not there in parent class
+
+Rules to override a method--->>>
+
+-> We cannot reduce the visibility of overriden methods.However we can increase the visbility.
+-> We cannot change the return type of a overriden method in a child class.
+-> We can change the return type of a overriden method in a child class if there is Is-A relationship between return types ( co-variant return type)
+-> We cannot change the argument list or parameters of a overriden method in a child class.It will be considered as overloaded method.
+
+
+--> Whenever we create Object of a class , refrence variable must be of same type as that of the object.
+
+     Dog d=new Dog();
+
+Hpowever in one case refrence variable can be of diff type i.e if the refrence varibale is of Parent type then it's allowed 
+
+Animal a=new Dog();
+
+--> Using Parent type reference, we can access inherited methods and overriden methods of a child class however we cannot access specialized method of child class using parent reference directly. But that can be achieved bby performing Casting(Down casting);
+
+
+Down casting --> Temporarily changing the behaviour from parent type to child type. ( to access specialized method of a child class)
+
+Upcasting --> Creating parent ref for child type Object.
+  Plane ref=new CargoPlane();
+(To Achived polymorphism)
+
+To Achieve Polymorphism :
+
+We must override method to see change in behavior in the output
+We must create parent type reference
+
+Method overriding == Runtime Polymorphism
+Method overloading == Compiletime Polymorphism
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

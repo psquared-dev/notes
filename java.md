@@ -90,3 +90,39 @@ public record LPAStudent(String id, String name, String dob, String classList) {
 ```
 
 ################################################
+
+We can overload the `main()` method too, but JVM will only call the `main()` which accpets an array of strings.
+
+Object is parent of all classes in Java.
+
+Java doesn't have operator overloading.
+
+Java only support multi-level inheritance (not multiple). The reason for this behavior is ambiguity issue. For e.g:
+
+If an obejct has `is-a` relationship with anohter object use inheritance.
+
+If an obejct has `has-a` relationship with anohter object don't use inheritance, use composition.
+
+We can increase the visility of overridden method but can't decrease it.
+
+We can't change the return type of overridden method in a child class.
+
+We can change the return type of overridden method in a child class if there `is-a` relationship between the return types (co-variant return type)
+
+We can't change the argument list or parameters of the overridden method. (if you do this the method will be considered as overloaded method)
+
+Whenever, we create object of a class then reference variable must be of same type as that of object.
+
+Dog d = new Dog();
+
+However, once case refernce varable can be of diff type i.e.f of parent type then it's allowed.
+
+Animal a = new Dog();   
+
+using parent type reference we can access inhertied methods and overriden methods of a child class. However, we can't access specailized method of child class using parent reference directly. But that can be achieved by performing downcasting.
+
+Down casting -> temporarily changing the behavior from parent to child type. (to access speacilized method of child class)
+
+Up casting -> creating parent reference for child type object.
+
+

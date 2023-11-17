@@ -1,0 +1,23 @@
+-->Constructor can be reffered as special type of setter whose name is same as that of a class name and it is invocked during Object creation. Also it doesn't have any explicit return type.
+
+--> If there is a call to Constructor and Programmer has not included any Constructor in a class then JavaC
+Would include a default Constructor.(Zero parametrized Constructor)
+
+--> However if programmer has included any Constructor, whther is parametrized or zero parametirzed
+then javaC would not include any default Constructor.
+
+--> Having more than One Constructor with Different parameters within a same class can be reffered as Constructor Overloading
+
+--> If there are any statements are to be executed the moment we create object of a class than we must include that within Constructor bcz Constructor is invocked when we create an Object.
+
+
+--> In Every Constructor the first statement, there would be super() call by default. If programmer has included this() then we cannot havce super() also. Because in a Constructor first statement either we can have super() or we can have this() but not the both.
+
+--> Constructor chaaining refers to process of one Constructor calling another Constructor. This can be achieved using super() and this(). 
+
+--> super() is used to call parent class Constructor
+
+--> this() is used to call Constructor within same class.
+============================================================================================================
+
+Main method can be overloaded in java. However JVM would invoke such a main method which is having String[]args as parameter.
