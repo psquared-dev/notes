@@ -1,0 +1,35 @@
+We can specify the application/Program requirement using interface.
+
+we can create an interface using 'interface' keyword.
+
+Inside an interface all the methods are by default/nature  public and abstract
+
+void add() ---> public abstract void add();
+
+interface is a collection of public abstract methods.
+
+An interface can have any number of implementing classes (Implementations) 
+
+We can create reference of interface type.
+
+We cannot create Object of an interface.(interface cannot be instantiated)
+
+interface can be implemented by classes using 'implements' keyword.
+
+An interface can have any number of implementations(one interface can have any number of classes implementing it)
+
+A class can implements multiple interfaces.(refer code source).
+
+An interface cannot implements another interface.
+
+An interface can extend another interface.
+
+A class can extends another class also implements an interface at same time(extends first then implements).
+
+An interface can have a variable. However variable inside an interface is public static and final. None of the implementing classes can modify that data.
+
+From Java 8 an interface can have a method with body(implementation). However that method must be declared using default keyword.
+
+It's not compulsory for an implementing class to override the default methods of an interface however if needed we can override also.
+
+From Java 8 an interface can also have static methods. However an implementing class cannot override that static method of an interface. We can also invock static method of an interface using interface name directly.

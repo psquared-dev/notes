@@ -1,0 +1,20 @@
+-->Static variables memory will be allocated on Heap area during class loading it self ( Class loader subsystem --> Linking --> Preparation ) Jvm would also initialize default value to static variable at this stage.
+
+-->Static block will be exceuted during class loading it self ( Class loading --> Initialization)
+
+-->If there are few statements to be executed even before main method we can use static block.
+
+-->Static variables memory will be allocated only once in heap area during class loading. When ever we have common copy of data which has to be shared among all the object of a class then we must use static variable as memory will be alloacted only once and same copy of data will be used among all objects of a class.
+
+-->Java Instance Initialization block will be executed during the object creation before the body of Constructor.
+
+-->Static methods can be invocked directly with class name. Also it can be invocked using reference of Object also
+
+--> When ever we have any common statements which must be executed for every Constructor we can include that within a Java Instance initiliazation block (Java block)
+
+--> Instance initialization block can be used to initialize the instance variables.
+
+============================================================================================
+static methods do get inherited(We can inherit static methods)
+
+When ever we try to override static method in Child class it will hide the parent class static method it will behave like a specilized method of child class(Overridind would not occur here). We cannot ovverride the static method in child class.
