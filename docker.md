@@ -135,6 +135,34 @@ To execute the command in a running container:
 docker exec -it <container_name_or_id> <command>
 ```
 
+## Docker Volume
+
+We can use `-v` option to specify the volume while starting the container. Another way is to create the volume.
+
+To find a list of volumes:
+
+```bash
+docker volume ls
+```
+
+To create new volume:
+
+```bash
+docker volume create new-vol
+```
+
+To find the directory where volume is located in host OS:
+
+```bash
+docker volume inspect new-vol
+```
+
+Now we can attach this voloume as follows:
+
+```bash
+docker run --rm -it -v new-vol:/vol alpine sh
+```
+
 To build an an image from the Dockerfile (assuming present in the curr directoty). The -t option is used to specify the tag.
 
 ```bash
