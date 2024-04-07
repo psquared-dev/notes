@@ -110,6 +110,12 @@ To specify the command to run when the container starts, this overrides the defa
 docker run -it -v /home/x/x/nginx/:/home python python3 /home/h.py                                                        
 ```
 
+To delete the container on exit use `--rm` option:
+
+```bash
+docker run --rm -it openjdk bash
+```
+
 Intead of specifying the absolute path to the script, we can use the -w option to specify the current working directory as follows:
 
 ```bash
