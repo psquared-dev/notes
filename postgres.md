@@ -557,3 +557,97 @@ where  docs @> '2'
 
 To use `@>` operator we must convert `json` to `jsonb` type.
 
+## Mofifying table structures
+
+create table persons(
+    person_id serial primary key,
+    first_name varchar(20) not null,
+    second_name varchar(20) not null,
+)
+
+Add age column:
+
+```sql
+alter table persons
+add column age int not null
+```
+
+Add nationality column:
+
+```sql
+alter table persons
+add column nationality varchar(20),
+add column email varchar(100) unique
+```
+
+Rename a table:
+
+```sql
+alter table persons
+rename to users
+```
+
+Rename a column:
+
+```sql
+alter table persons
+rename column age to person_age
+```
+
+Drop a column:
+
+```sql
+alter table persons
+drop column person_age
+```
+
+Change the datatype of a column:
+
+```sql
+alter table persons
+alter column age type int
+```
+
+If `age` column is declared as `varchar`, then the above statement would throw an error because psql can't automatically convert `varchar` values to `int`.
+
+To accomplish the conversion, we execute the query using `USING` clause as follows:
+
+```sql
+alter table persons
+alter column age type int
+using age::integer
+```
+
+Define a new table
+
+```sql
+create table web_links(
+    link_id serial primary key,
+    link_url varchar(255) not null,
+    link_target varchar(20)
+);
+```
+
+Adding unique constraint
+
+```sql
+alter table web_links
+add constraint unique_web_url unique(link_url)
+```
+
+Add a new column
+
+```sql
+alter table web_links
+add column is_enable varchar(2)
+```
+
+Set column to accept only defined values
+
+```sql
+alter table web_links
+add check (is_enable in ('Y', 'N') )    
+```
+
+
+
