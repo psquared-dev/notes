@@ -65,6 +65,68 @@ offset 5
 
 `offset` can be written before or after the `fetch` clause.
 
+---------------------------------------------
+
+* `select 'hello' || null || 'world'` outputs `NULL` which is undesired. 
+
+We can use `concat()` or `concat_ws()`.
+
+```sql
+select concat(null, '|', null) 
+select concat_ws('|', null, null)
+```
+
+Both functions ignore the `null` values.
+
+Output:
+
+```bash
+NULL
+[EMPTY_STRING]
+```
+
+---------------------------------------------
+
+Boolean data type
+####################
+
+1. PostgreSQL supports a single Boolean data type: BOOLEAN that can have three values:
+
+TRUE,
+FALSE and
+NULL.
+
+2. Following are some valid literals for boolean values in PostgreSQL
+
+-- must be enclosed in single quotes except for true and false
+
+TRUE | FALSE
+---- |---------------
+TRUE | FALSE
+'true' | 'false'
+'t' | 'f'
+'y' | 'n'
+'yes' | 'no'
+'1' | '0'
+
+
+Character data type
+######################
+
+1. Characters strings types are general-purpose types suitable for;
+
+- text,
+- numbers, and
+- symbols
+
+2. Three main types of CHARATER data:
+
+Character | Types Notes
+----------|-----------------------
+CHARACTER (n), CHAR(n) | fixed-length, blank padded
+CHARACTER VARYING (n), VARCHAR(n) | variable-length with length limit
+TEXT, VARCHAR | variable unlimited length
+
 * use `char` when you know the column will contain fixed no of characters.  If characters are less than the specified lenght they are padded with spaces. If you use `varchar`, then it stores the exact no of characters provided without adding spaces.
 
 * number types:
