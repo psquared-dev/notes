@@ -212,16 +212,14 @@ The `numeric` and `decimal` types in PostgreSQL are functionally equivalent; the
 
 Two types are;
 
-real: allows precision to six decimal digits
-double: allows precision to 15 decimal points of precision
+* real: allows precision to six decimal digits
+* double: allows precision to 15 decimal points of precision
 
 Unlike numeric, where we specify fixed precision and scale (e.g. `numeric (10,2)`), the decimal point in a given column can "float" depending on the number
 
 Data type |  Storage Size | Storage type | Range
 ----------|---------------|--------------|----------
-`numeric`, `decimal`|  variable | fixed point | Upto 131072 digits before the decimal point
-                                            Upto 1638 digits after the decimal point
-
+`numeric`, `decimal`|  variable | fixed point | Upto 131072 digits before the decimal point Upto 1638 digits after the decimal point
 `real`  | 4 bytes | floating point | 6 decimal digits precision
 `double precision` | 8 bytes | floating point |  15 decimal digits precision
 
