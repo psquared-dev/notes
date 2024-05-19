@@ -618,6 +618,16 @@ alter column age type int
 using age::integer
 ```
 
+Set a default value for a column:
+
+```sql
+alter table persons
+add column is_enable varchar(1);
+
+alter table persons
+alter column is_enable set default 'Y';
+```
+
 Define a new table
 
 ```sql
@@ -648,6 +658,5 @@ Set column to accept only defined values
 alter table web_links
 add check (is_enable in ('Y', 'N') )    
 ```
-
 
 
