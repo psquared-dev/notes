@@ -89,15 +89,15 @@ NULL
 
 ## Boolean data type
 
-1. PostgreSQL supports a single Boolean data type: BOOLEAN that can have three values:
+PostgreSQL supports a single Boolean data type: BOOLEAN that can have three values:
 
-TRUE,
-FALSE and
-NULL.
+- TRUE,
+- FALSE and
+- NULL.
 
-2. Following are some valid literals for boolean values in PostgreSQL
+Following are some valid literals for boolean values in PostgreSQL
 
--- must be enclosed in single quotes except for true and false
+-- must be enclosed in single quotes except for `true` and `false`.
 
 TRUE | FALSE
 ---- |---------------
