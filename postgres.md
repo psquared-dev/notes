@@ -254,20 +254,24 @@ Type        |         Stores           |           low value |       High value
 Date        |         date only               |  4713 BC     |    294276 AD
 Time        |         time only               |  4713 BC     |    5874897 AD
 Timestamp   |         date and time           |  4713 BC     |    294276 AD
-Timestamptz |       date time and timestamp |   4713 BC    |    294276 AD
+Timestamptz |       date, time and timezone |   4713 BC    |    294276 AD
 Interval    |       store values            |      NA        | NA
 
 
 ## DATE data type
 
 1. Store date values
-2. Uses 4 bytes to store datte value
+2. Uses 4 bytes to store date value
 3. By default uses the format YYYY-MM-DD
 4. Some good useful keywords
-    CURRENT_DATE        stores current date
-5. column_name DATE
 
--- Lets create a sample table with a DATE data type column
+```bash
+    CURRENT_DATE   -       stores current date
+```
+
+5. column_name `DATE`
+
+Lets create a sample table with a `DATE` data type column
 
 ```sql
 CREATE TABLE table_dates (
