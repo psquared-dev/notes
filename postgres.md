@@ -249,13 +249,13 @@ Float will save space, but be careful about inexactness
 2. One of the most important types
 3. Below is the date/time data types available
 
-           |         Stores           |           low value |       High value
------------|--------------------------|---------------------|----------------------------
-Date       |         date only               |  4713 BC     |    294276 AD
-Time       |         time only               |  4713 BC     |    5874897 AD
-Timestamp  |         date and time           |  4713 BC     |    294276 AD
-Timestamptz  |       date time and timestamp |   4713 BC    |    294276 AD
-Interval     |       store values            |              |
+Type        |         Stores           |           low value |       High value
+------------|--------------------------|---------------------|----------------------------
+Date        |         date only               |  4713 BC     |    294276 AD
+Time        |         time only               |  4713 BC     |    5874897 AD
+Timestamp   |         date and time           |  4713 BC     |    294276 AD
+Timestamptz |       date time and timestamp |   4713 BC    |    294276 AD
+Interval    |       store values            |      NA        | NA
 
 
 ## DATE data type
