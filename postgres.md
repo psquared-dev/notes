@@ -225,11 +225,13 @@ Data type |  Storage Size | Storage type | Range
 
 lets create our numbers table:
 
+```sql
 CREATE TABLE table_numbers (
     col_numeric numeric (20.1(5),
     col_real real,
     col_double double precision
 );
+```
 
 ---------------------------------------------------------------------
 
