@@ -87,8 +87,7 @@ NULL
 
 ---------------------------------------------
 
-Boolean data type
-####################
+## Boolean data type
 
 1. PostgreSQL supports a single Boolean data type: BOOLEAN that can have three values:
 
@@ -109,9 +108,9 @@ TRUE | FALSE
 'yes' | 'no'
 '1' | '0'
 
+---------------------------------------------
 
-Character data type
-######################
+## Character data type
 
 1. Characters strings types are general-purpose types suitable for;
 
@@ -128,6 +127,8 @@ CHARACTER VARYING (n), VARCHAR(n) | variable-length with length limit
 TEXT, VARCHAR | variable unlimited length
 
 * use `char` when you know the column will contain fixed no of characters.  If characters are less than the specified lenght they are padded with spaces. If you use `varchar`, then it stores the exact no of characters provided without adding spaces.
+
+---------------------------------------------
 
 * number types:
 
