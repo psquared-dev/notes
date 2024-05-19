@@ -112,19 +112,41 @@ TRUE | FALSE
 
 ## Character data type
 
-1. Characters strings types are general-purpose types suitable for;
+Characters strings types are general-purpose types suitable for;
 
 - text,
 - numbers, and
 - symbols
 
-2. Three main types of CHARATER data:
+Three main types of CHARATER data:
 
 Character | Types Notes
 ----------|-----------------------
 CHARACTER (n), CHAR(n) | fixed-length, blank padded
 CHARACTER VARYING (n), VARCHAR(n) | variable-length with length limit
 TEXT, VARCHAR | variable unlimited length
+
+where `n` is number of characters that the column holds. If no value is specified then it default to `1`.
+
+If the excessive characters are all spaces, PostgreSQL truncates the spaces to the maximum length (n) and stores the characters.
+
+### CHARACTER (n), CHAR(n)
+
+`char(10)` will store 10 character length. However if you insert less then 10 characters, PostgreSQL will pads the rest of the that column with spaces.
+
+### CHARACTER VARYING (n), VARCHAR(n) (variable-length with length limit)
+
+1. Useful if entries in a column can vary in length but you don't want PostgreSQL to pad the field with blanks.
+2. Store exactly the number of characters provided. Save space! :)
+3. No default value exist for this type.
+4. In here means maximum number of characters
+
+
+### TEXT variable length column, any size
+
+1. variable-length column type I
+2. Unlimited length (per PostgreSQL it say max approx. 1GB )
+3. Not part of SQL standard, but similar types available in Microsoft SQL server and MySQL etc.
 
 * use `char` when you know the column will contain fixed no of characters.  If characters are less than the specified lenght they are padded with spaces. If you use `varchar`, then it stores the exact no of characters provided without adding spaces.
 
