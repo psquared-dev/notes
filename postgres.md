@@ -454,3 +454,104 @@ FROM
 ---------------------------------------------------------------------
 
 
+## hstore data type
+
+1. hstore is a data type that store data into key-value pairs
+2. The hstore module implements the hstore data type.
+3. The keys and values are just text strings only.
+
+1. Lets install hstore extensions first:
+
+```sql
+CREATE EXTENSION IF NOT EXIST hstore;
+```
+
+2. Lets create our sample table:
+
+```sql
+create table table_hstore(
+    book_id serial primary key,
+    title varchar(100) not null,
+    book_info hstore;
+)
+```
+
+3. Insert some rows:
+
+```sql
+insert
+	into
+	table_hstore (title,
+	book_info)
+values 
+( 'title1',
+'
+	"publisher" => "ABC",
+	"paper_cost" => "10.00",
+	"e_cost" => "5.85",
+'
+),
+( 'title2',
+'
+	"publisher" => "ABC",
+	"paper_cost" => "102.00",
+	"e_cost" => "10.85",
+'
+)
+```
+
+4. Selecting rows:
+
+```sql
+select
+	book_info -> 'publisher',
+	book_info -> 'e_cost'
+from
+	table_hstore th
+where CAST( book_info -> 'e_cost' as DECIMAL ) > 6
+```
+
+### JSON data type
+
+1. PostgreSQL has built-in support for JSON with a great range of processing functions and operators, and complete indexing support.
+
+2. The JSON datatype is actually text under the hood, with a verification that the format is valid json input... much like XML.
+
+3. The JSONB implemented a binary version of the JSON datatype.
+
+4. The JSON datatype, being a text datatype, stores the data presentation exactly as it is sent to PostgreSQL, including whitespace and indentation, and also multiple-keys when present (no processing at all is done on the content, only form validation).
+
+5. The JSONB datatype is an advanced binary storage format with full processing, indexing and searching capabilities, and as such pre-processes the JSON data to an internal format, which does include a single value per key; and also isn't sensible to extra whitespace or indentation.
+
+Example:
+
+1. Let's create a table:
+
+```sql
+create table table_json(
+	id serial primary key,
+	docs json
+)
+```
+
+2. Insert some rows:
+
+```sql
+insert into table_json (docs) 
+values 
+('[1, 2, 3, 4, 5, 6]'),
+('{"key1": "value1", "key2": "value2"}')
+```
+
+3. Select rows:
+
+```sql
+select
+	*
+from
+	table_json tj
+where  docs @> '2'
+```
+
+To use `@>` operator we must convert `json` to `jsonb` type.
+
