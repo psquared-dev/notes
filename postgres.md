@@ -557,6 +557,8 @@ where  docs @> '2'
 
 To use `@>` operator we must convert `json` to `jsonb` type.
 
+-----------------------------
+
 ## Mofifying table structures
 
 create table persons(
@@ -658,5 +660,38 @@ Set column to accept only defined values
 alter table web_links
 add check (is_enable in ('Y', 'N') )    
 ```
+
+-----------------------------
+
+## Type conversion
+
+1. A data converted from its ORIGINAL data type to ANOTHER data type, it is called 'Type Conversion'.
+
+2. Two type of conversions:
+
+* Implicit data conversion is done AUTOMATICALLY
+* Explicit data conversion is done via conversion functions' e.g `CAST` or `::`.
+
+```sql
+select * from movies    
+where movie_id = 1           -- no conversion here
+```
+
+Implicity `string` to `int` conversion:
+
+```sql
+select * from movies    
+where movie_id = '1'           
+```
+
+Here `'1'` is Implicity converted to `int` before comparision is done.
+
+We can also force the conversion as follows:
+
+```sql
+select * from movies  where movie_id = integer '1';
+```
+
+
 
 
