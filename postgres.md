@@ -172,42 +172,58 @@ integer | 4 bytes | -2147483648 to +2147483647
 bigint | 8 bytes | -9223372036854775808 to +9223372036854775807
 
 3. bigint will be good enough for most of the situation if not all! Numbers larger than 2.1 billion
-4 Database will give error if a number is outside of its data type range as per above table.
+4. Database will give error if a number is outside of its data type range as per above table.
+5. auto-increment integer type is `serial`.
 
-* number types:
+For serial data type:
+
+serial type | size | range
+-------------|------|----------------
+smallserial | 2 bytes | 1 to 32767
+serial | 4 bytes | 1 to 2147483647
+bigserial | 8 bytes | 1 to 9223372036854775807
+
+----------------------------------------
+
+## Decimal Numbers
 
 Decimals Numbers
 1. Decimals represents a whole number plus a fraction of a whole number
 2. The fraction is represented by digits following a decimal point
 
-## Fixed-point numbers
+### Fixed-point numbers
 
+```bash
 numeric(precision, scale)
+```
 
-precision: Maximum number of digits to the left and right of the decimal point
-scale: number of digits allowable on the right of the decimal point.
+`precision`: Maximum number of digits to the left and right of the decimal point
+`scale`: number of digits allowable on the right of the decimal point.
 
+```bash
 decimal (precision, scale)
+```
 
-e.g. numeric(10,2) will return two digits to the right of the decimal points
+E.g: `numeric(10,2)` will return two digits to the right of the decimal points
 
-## Floating-point numbers
+The `numeric` and `decimal` types in PostgreSQL are functionally equivalent; they both represent fixed-point numbers with user-specified precision and scale. However, historically, they were different types in SQL standards.
+
+### Floating-point numbers
 
 Two types are;
 
 real: allows precision to six decimal digits
 double: allows precision to 15 decimal points of precision
 
-Unlike numeric, where we specify fixed precision and scale (e.g. numeric (10,2)), the decimal point in a given column can "float" depending on the number
+Unlike numeric, where we specify fixed precision and scale (e.g. `numeric (10,2)`), the decimal point in a given column can "float" depending on the number
 
 Data type |  Storage Size | Storage type | Range
 ----------|---------------|--------------|----------
-numeric, decimal|  variable | fixed point | Upto 131072 digits before the decimal point
+`numeric`, `decimal`|  variable | fixed point | Upto 131072 digits before the decimal point
                                             Upto 1638 digits after the decimal point
 
-real  | 4 bytes | floating point | 6 decimal digits precision
-double precision | 8 bytes | floating point |  15 decimal digits precision
-
+`real`  | 4 bytes | floating point | 6 decimal digits precision
+`double precision` | 8 bytes | floating point |  15 decimal digits precision
 
 lets create our numbers table:
 
