@@ -776,12 +776,36 @@ String to Interval:
 
 ```sql
 SELECT
-'10 minute': : interval,
-'4 hour' interval,
+'10 minute' :: interval,
+'4 hour' :: interval,
 '1 day':: interval,
 '1 week':: interval,
 '5 month':: interval;
 ```
+
+Calculating factorial:
+
+```sql
+select factorial(5);
+```
+
+In older versions, `!` operator was used to calculate factorial. E.g: `select 5 !;`. In current versions, it is removed.
+
+Rounding numbers:
+
+```sql
+select round(10, 4) as "results"
+```
+
+CAST with text:
+
+```sql
+select 
+    substr('123456', 2) as "implicit",
+    substr(cast('123456' as text), 2) as "explicit";
+```
+
+
 
 
 
