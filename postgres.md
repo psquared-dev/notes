@@ -243,24 +243,22 @@ Float will save space, but be careful about inexactness
 
 ---------------------------------------------------------------------
 
-Date/Time data types
-#######################
+## Date/Time data types
 
 1. assigned to the variable that is supposed to store only the time value.
 2. One of the most important types
 3. Below is the date/time data types available
 
-                    Stores                      low value       High value
-Date                date only                   4713 BC         294276 AD
-Time                time only                   4713 BC         5874897 AD
-Timestamp           date and time               4713 BC         294276 AD
-Timestamptz         date time and timestamp     4713 BC         294276 AD
-Interval            store values
+           |         Stores           |           low value |       High value
+-----------|--------------------------|---------------------|----------------------------
+Date       |         date only               |  4713 BC     |    294276 AD
+Time       |         time only               |  4713 BC     |    5874897 AD
+Timestamp  |         date and time           |  4713 BC     |    294276 AD
+Timestamptz  |       date time and timestamp |   4713 BC    |    294276 AD
+Interval     |       store values            |              |
 
----------------------------------------------------------------------
 
-DATE data type
-##################
+## DATE data type
 
 1. Store date values
 2. Uses 4 bytes to store datte value
@@ -271,20 +269,16 @@ DATE data type
 
 -- Lets create a sample table with a DATE data type column
 
+```sql
 CREATE TABLE table_dates (
     id serial primary key,
     employee_name varchar(100) NOT NULL,
     hire date DATE NOT NULL,
     add_date DATE DEFAULT CURRENT_DATE
 ) ;
+```
 
-
----------------------------------------------------------------------
-
-
-TIME Data type
-#####################
-
+### TIME Data type
 
 1. store the time of day values.
 2. Take 8 bytes to store time
