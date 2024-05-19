@@ -316,10 +316,10 @@ CREATE TABLE table_time(
 ```
 
 
-#### Airthematic operations:
+#### Arithematic operations:
 
 ```sql
-SELECT time '12:00' - time '04:00' as RESULT; // prints the diff b/w two times
+SELECT time '12:00' - time '04:00' as RESULT; -- prints the diff b/w two times
 ```
 
 #### Using Interval:
