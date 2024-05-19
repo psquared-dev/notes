@@ -212,8 +212,8 @@ The `numeric` and `decimal` types in PostgreSQL are functionally equivalent; the
 
 Two types are;
 
-* real: allows precision to six decimal digits
-* double: allows precision to 15 decimal points of precision
+* `real`: allows precision to six decimal digits
+* `double precision`: allows precision to 15 decimal points of precision
 
 Unlike numeric, where we specify fixed precision and scale (e.g. `numeric (10,2)`), the decimal point in a given column can "float" depending on the number
 
@@ -227,16 +227,13 @@ lets create our numbers table:
 
 ```sql
 CREATE TABLE table_numbers (
-    col_numeric numeric (20.1(5),
+    col_numeric numeric (20,5),
     col_real real,
     col_double double precision
 );
 ```
 
----------------------------------------------------------------------
-
-Selecting Number data type
-############################
+### Selecting Number data type
 
 1. Use integers whever possible.
 2. Decimal data and calcuations needs to be exact, then use numeric or decimal
