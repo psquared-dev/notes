@@ -165,7 +165,8 @@ If the excessive characters are all spaces, PostgreSQL truncates the spaces to t
 1. Most common type
 2. Three main types of integers
 
-integer ype | size | range
+integer type | size | range
+-------------|------|----------------
 smallint | 2 bytes | -32768 to +32767
 integer | 4 bytes | -2147483648 to +2147483647
 bigint | 8 bytes | -9223372036854775808 to +9223372036854775807
