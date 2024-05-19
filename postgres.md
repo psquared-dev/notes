@@ -511,6 +511,8 @@ from
 where CAST( book_info -> 'e_cost' as DECIMAL ) > 6
 ```
 
+----------------------------------------
+
 ### JSON data type
 
 1. PostgreSQL has built-in support for JSON with a great range of processing functions and operators, and complete indexing support.
