@@ -693,5 +693,97 @@ select * from movies  where movie_id = integer '1';
 ```
 
 
+###  CAST (expression AS target_data_type);
+
+PostgreSQL CAST operator is used to convert a value of one type to another data type.
+
+`expression`: Can be a constar, a table column, or an expression
+
+target_data_type: 
+
+* Boolean
+* Character (char, varchar, text)
+* Numeric (integer, floating point number)
+* array
+* JSON
+* UUID
+* hstore (stores as key/value pairs)
+* Temporal type (date, time, timestamp, interval)
+* special type (network address, geometric data)
+
+
+String to integer conversion:
+
+```sql
+select cast('10' as int);
+```
+
+String to date conversion:
+
+```sql
+select 
+    cast('2020-01-01' as date),
+    cast('01-may-2020' as date);
+```
+
+String to boolean
+
+```sql
+select 
+    cast('true' as boolean),
+    cast('false' as boolean),
+    cast('t' as boolean),
+    cast('f' as boolean);
+
+select 
+    cast('0' as boolean),
+    cast('1' as boolean);    
+```
+
+String to double:
+
+```sql
+select 
+    cast('14.7888' as double precision);
+```
+
+You can also use the following syntax for conversion directly too:
+
+```text
+expression::type
+```
+
+```sql
+SELECT
+'10' INTEGER,
+'2020-01-01':: DATE,
+'01-01-2020':: DATE;
+```
+
+String to timestamp:
+
+```sql
+SELECT '2020-02-20 10:30:25.467':: TIMESTAMP;
+```
+
+with timezone:
+
+```sql
+SELECT '2020-02-20 10:300::2546 2 467' TIMESTAMPTZ;
+```
+
+String to Interval:
+
+```sql
+SELECT
+'10 minute': : interval,
+'4 hour' interval,
+'1 day':: interval,
+'1 week':: interval,
+'5 month':: interval;
+```
+
+
+
 
 
