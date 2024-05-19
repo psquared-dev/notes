@@ -318,10 +318,9 @@ CREATE TABLE table_time(
 
 #### Airthematic operations:
 
-04:00
-10:00
-
+```sql
 SELECT time '12:00' - time '04:00' as RESULT; // prints the diff b/w two times
+```
 
 #### Using Interval:
 
