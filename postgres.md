@@ -152,6 +152,27 @@ If the excessive characters are all spaces, PostgreSQL truncates the spaces to t
 
 ---------------------------------------------
 
+## Numbers Data types
+
+1. Numbers columns can hold various type numbers, but not `NULL` values.
+2. Math operations (adding, multiplying, divide etc.) can be performed on numbers data type
+3. Two main types of Numbers data are:
+    * Integers Whole numbers, both +ve and -ve
+    * Fixed-point, floating point Two format of fractions of whole numbers
+
+### Integers
+
+1. Most common type
+2. Three main types of integers
+
+integer ype | size | range
+smallint | 2 bytes | -32768 to +32767
+integer | 4 bytes | -2147483648 to +2147483647
+bigint | 8 bytes | -9223372036854775808 to +9223372036854775807
+
+3. bigint will be good enough for most of the situation if not all! Numbers larger than 2.1 billion
+4 Database will give error if a number is outside of its data type range as per above table.
+
 * number types:
 
 Decimals Numbers
