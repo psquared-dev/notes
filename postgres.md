@@ -934,3 +934,41 @@ D      | decimal point that uses locale
 FM | Fill mode, which suppresses padding blanks and leading zeroes.
 PR | Negative value in angle brackets.
 S | Sign anchored to a number that uses locale
+L | Currency symbol that uses locale
+G | Group separator that uses locale
+ΜΙ | Minus sign in the specified position for numbers that are less than 0.
+PL | Plus sign in the specified position for numbers that are greater than 0.
+SG | Plus/minus sign in the specified position
+RN | Roman numeral that ranges from 1 to 3999
+TH or th | Upper case or lower case ordinal number suffix
+
+Examples:
+
+```sql
+movies=> select to_number('1420.89', '9999.');
+ to_number 
+-----------
+      1420
+(1 row)
+
+movies=> select to_number('$1,420.89', 'L9G999.99');
+ to_number 
+-----------
+   1420.89
+(1 row)
+
+movies=> select to_number('1,234,567.89', '9G999g999.99');
+ to_number  
+------------
+ 1234567.89
+(1 row)
+
+movies=> select to_number('$1,978,299.78', 'L9G999g999.99');
+ to_number  
+------------
+ 1978299.78
+(1 row)
+
+movies=> 
+```
+
