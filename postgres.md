@@ -1343,5 +1343,76 @@ select (item).product_name from inventory_item;
 create type currency as enum ('usd', 'eur', 'gbp');
 
 -- to access a single value from enum
-select 'usd'::currency
+select 'usd'::currency;
+
+-- add a new value to enum
+alter type currency add value 'CHF' after 'GBP';
+
+-- create table using currency type
+create table stocks(
+	stock_id serial primary key,
+	stock_currency currency
+);
+
+insert into stocks (stock_currency)
+values ('USD');
+
+-- create temporary sample_type
+create type sample_type as enum ('ABC', '123');
+
+-- drop the sample_type
+drop type sample_type;
+```
+
+**Example 4: Alter composite type** 
+
+```sql
+create type myaddress(
+    city varchar(50),
+    country varchar(20)
+);
+
+-- rename the type
+alter type myaddress rename to my_address;
+
+-- change the owner
+alter type my_address owner to postgres;
+
+-- change schema
+alter type my_address set schema test_scm;
+
+-- adding an attrbute (means adding a new column)
+alter type my_address add attribute street_address varchar (150);
+```
+
+**Example 5: Alter an enum data type**
+
+```sql
+-- create a enum type
+create type mycolors as enum ('green', 'red', 'blue');
+
+-- update a value
+alter type mycolors rename value 'red' to 'orange';
+
+-- list all enum values
+select enum_range(null::mycolors);
+
+-- adding a new value
+alter type mycolors add value 'red' before 'green';
+```
+
+**Example 6: An enum type with default value**
+
+```sql
+-- first create an enum type
+create type status as enum ('pending', 'approved', 'declined');
+
+-- create a table assign default value to the column
+create table cron_jobs(
+    cron_job_id int,
+    status status default 'pending'
+);
+
+-- testing with insert
+insert into cron_job (cron_job_id) values (1);
 ```
