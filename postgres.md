@@ -1256,4 +1256,92 @@ WHERE
 typtype = 'd' and nspname = 'public';  -- d is for domain type and nspname for schema
 ```
 
-##
+### Dropping domain type
+
+Dropping domain can be done as follows:
+
+```sql
+drop domain positive_numeric;
+```
+
+However, if domain is associated with any table, the above statement would throw an error.
+
+If you still want to proceed with the deletion use the `cascade` keyword as follows:
+
+```sql
+drop domain positive_numeric cascade;
+```
+
+This will drop the domain as well as the column from assoicated table.
+
+
+### Composite data types
+
+1. List of field names with corresponding data types
+2. Used in a table as a 'column'
+3. Used in functions or procedures
+4. Can return multiple values, its a composite data type
+
+Syntax:
+
+```sql
+CREATE TYPE name AS (fields columns_properties)
+```
+
+**Example 1: Create an address composte data type**
+
+```sql
+create type address as (
+    city varchar(50),
+    country varchar(20)
+);
+
+create table companies(
+    comp_id serial primary key,
+    addresses address
+);
+
+insert into companies (address) values (row('london', 'uk'));
+
+-- 
+-- fetching data
+-- (composite_column).field_name
+-- when you're dealing with multiple tables use
+-- (tablename.composite_column).field_name
+-- 
+
+select (address).country from companies;
+```
+
+**Example 2: Create a composite inventory_item data type**
+
+```sql
+create type inventory_item as (
+    product_name varchar(200),
+    supplier_id int,
+    price numeric
+);
+
+create table inventory(
+    inventory_id serial primary key,
+    item inventory_item
+);
+
+
+insert into table_inventory (item)
+values
+( row('pen', 10, 4.99) )
+
+select * from inventory_item;
+
+select (item).product_name from inventory_item;
+```
+
+**Example 3: Create a currency ENUM data type with currency data**
+
+```sql
+create type currency as enum ('usd', 'eur', 'gbp');
+
+-- to access a single value from enum
+select 'usd'::currency
+```
