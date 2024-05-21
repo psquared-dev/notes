@@ -972,3 +972,288 @@ movies=> select to_number('$1,978,299.78', 'L9G999g999.99');
 movies=> 
 ```
 
+### to_date()
+
+1. PostgreSQL `TO_DATE()` function that helps you convert a string to a date.
+2. `TO_DATE(text, format)`
+3. Valid format options are:
+
+| Pattern | Description                                                                                             |
+|---------|---------------------------------------------------------------------------------------------------------|
+| Y, YYY  | Year in 4 digits with comma                                                                            |
+| YYYY    | Year in 4 digits                                                                                        |
+| YYY     | Last 3 digits of year                                                                                   |
+| YY      | Last 2 digits of year                                                                                   |
+| Y       | The last digit of year                                                                                  |
+| IYYY    | ISO 8601 week-numbering year (4 or more digits)                                                         |
+| IYY     | Last 3 digits of ISO 8601 week-numbering year                                                           |
+| IY      | Last 2 digits of ISO 8601 week-numbering year                                                           |
+| I       | Last digit of ISO 8601 week-numbering year                                                              |
+| BC      | Era indicator without periods                                                                          |
+| bc      | Era indicator without periods                                                                          |
+| AD      | Era indicator with periods                                                                             |
+| ad      | Era indicator with periods                                                                             |
+| MONTH   | English month name in uppercase                                                                        |
+| Month   | Full capitalized English month name                                                                    |
+| month   | Full lowercase English month name                                                                      |
+| ΜΟΝ     | Abbreviated uppercase month name (e.g., JAN, FEB, etc.)                                                |
+| Mon     | Abbreviated capitalized month name (e.g., Jan, Feb, etc.)                                              |
+| mon     | Abbreviated lowercase month name (e.g., jan, feb, etc.)                                                |
+| MM      | Month number from 01 to 12                                                                             |
+| DAY     | Full uppercase day name                                                                                |
+| Day     | Full capitalized day name                                                                              |
+| day     | Full lowercase day name                                                                                |
+| DY      | Abbreviated uppercase day name                                                                         |
+| Dy      | Abbreviated capitalized day name                                                                       |
+| dy      | Abbreviated lowercase day name                                                                         |
+| DDD     | Day of year (001-366)                                                                                  |
+| IDDD    | Day of ISO 8601 week-numbering year (001-371; day 1 of the year is Monday of the first ISO week)       |
+| DD      | Day of month (01-31)                                                                                   |
+| D       | Day of the week, Sunday (1) to Saturday (7)                                                            |
+| ID      | ISO 8601 day of the week, Monday (1) to Sunday (7)                                                     |
+| W       | Week of month (1-5) (the first week starts on the first day of the month)                              |
+| WW      | Week number of year (1-53) (the first week starts on the first day of the year)                         |
+| IW      | Week number of ISO 8601 week-numbering year (01-53; the first Thursday of the year is in week 1)        |
+| CC      | Century e.g., 21, 22, etc.                                                                             |
+| J       | Julian Day (integer days since November 24, 4714 BC at midnight UTC).                                  |
+| RM      | Month in upper case Roman numerals (I-XII)                                                              |
+| rm      | Month in lowercase Roman numerals (i-xii)                                                               |
+| HH      | Hour of day (0-12)                                                                                      |
+| HH12    | Hour of day (0-12)                                                                                      |
+| HH24    | Hour of day (0-23)                                                                                      |
+| ΜΙ      | Minute (0-59)                                                                                           |
+| SS      | Second (0-59)                                                                                           |
+| MS      | Millisecond (000-9999)                                                                                 |
+| US      | Microsecond (000000-999999)                                                                            |
+| SSSS    | Seconds past midnight (0-86399)                                                                        |
+| AM      | Meridiem indicator (without periods)                                                                   |
+| am      | Meridiem indicator (without periods)                                                                   |
+| PM      | Meridiem indicator (with periods)                                                                      |
+| pm      | Meridiem indicator (with periods)                                                                      |
+
+Examples:
+
+```sql
+movies=> select to_date('2010/10/22', 'YYYY/MM/DD');
+  to_date   
+------------
+ 2010-10-22
+(1 row)
+
+movies=> select to_date('022199', 'MMDDYY');
+  to_date   
+------------
+ 1999-02-21
+(1 row)
+
+movies=> select to_date('March 07, 2019', 'Month DD, YYYY');
+  to_date   
+------------
+ 2019-03-07
+(1 row)
+
+movies=> 
+movies=> select to_date('2022/02/30', 'YYYY/MM/DD');
+ERROR:  date/time field value out of range: "2022/02/30"
+movies=> 
+```
+
+### to_timestamp()
+
+
+
+| Pattern | Description                                                                                           |
+|---------|-------------------------------------------------------------------------------------------------------|
+| Y, YYY  | Year in 4 digits with comma                                                                          |
+| YYYY    | Year in 4 digits                                                                                      |
+| YYY     | Last 3 digits of year                                                                                 |
+| YY      | Last 2 digits of year                                                                                 |
+| Y       | The last digit of year                                                                                |
+| IYYY    | ISO 8601 week-numbering year (4 or more digits)                                                       |
+| IYY     | Last 3 digits of ISO 8601 week-numbering year                                                         |
+| IY      | Last 2 digits of ISO 8601 week-numbering year                                                         |
+| I       | Last digit of ISO 8601 week-numbering year                                                            |
+| BC      | Era indicator without periods                                                                         |
+| bc      | Era indicator without periods                                                                         |
+| AD      | Era indicator with periods                                                                            |
+| ad      | Era indicator with periods                                                                            |
+| MONTH   | English month name in uppercase                                                                       |
+| Month   | Full capitalized English month name                                                                   |
+| month   | Full lowercase English month name                                                                     |
+| ΜΟΝ     | Abbreviated uppercase month name (e.g., JAN, FEB, etc.)                                               |
+| DD      | Day of month (01-31)                                                                                  |
+| D       | Day of the week, Sunday (1) to Saturday (7)                                                           |
+| ID      | ISO 8601 day of the week, Monday (1) to Sunday (7)                                                    |
+| W       | Week of month (1-5) (the first week starts on the first day of the month)                              |
+| WW      | Week number of year (1-53) (the first week starts on the first day of the year)                         |
+| IW      | Week number of ISO 8601 week-numbering year (01-53%; the first Thursday of the year is in week 1)       |
+| CC      | Century e.g., 21, 22, etc.                                                                            |
+| J       | Julian Day (integer days since November 24, 4714 BC at midnight UTC)                                   |
+| RM      | Month in upper case Roman numerals (I-XII)                                                             |
+| rm      | Month in lowercase Roman numerals (i-xii)                                                              |
+| HH      | Hour of day (0-12)                                                                                     |
+| HH12    | Hour of day (0-12)                                                                                     |
+| HH24    | Hour of day (0-23)                                                                                     |
+| ΜΙ      | Minute (0-59)                                                                                          |
+| SS      | Second (0-59)                                                                                          |
+| MS      | Millisecond (000-9999)                                                                                 |
+| US      | Microsecond (000000-999999)                                                                            |
+| SSSS    | Seconds past midnight (0-86399)                                                                        |
+| AM      | Meridiem indicator (without periods)                                                                   |
+| am      | Meridiem indicator (without periods)                                                                   |
+| PM      | Meridiem indicator (with periods)                                                                      |
+| pm      | Meridiem indicator (with periods)                                                                      |
+
+
+Examples:
+
+```sql
+movies=> select to_timestamp('2020-10-28 10:30:25', 'YYYY-MM-DD');
+      to_timestamp      
+------------------------
+ 2020-10-28 00:00:00+00
+(1 row)
+
+movies=> 
+movies=> select to_timestamp('2020-10-28 10:30:25', 'YYYY-MM-DD HH:MI');
+      to_timestamp      
+------------------------
+ 2020-10-28 10:30:00+00
+(1 row)
+
+
+movies=> select to_timestamp('2020-10-28 22:30:25', 'YYYY-MM-DD HH24:MI');
+      to_timestamp      
+------------------------
+ 2020-10-28 22:30:00+00
+(1 row)
+
+movies=> select to_timestamp('2020-10-28 22:30:25', 'YYYY-MM-DD HH:MI');
+ERROR:  hour "22" is invalid for the 12-hour clock
+HINT:  Use the 24-hour clock, or give an hour between 1 and 12.
+movies=> 
+movies=> select to_timestamp('2020-10-28 22:30:25', 'YYYY-MM-DD HH24:MI');
+      to_timestamp      
+------------------------
+ 2020-10-28 22:30:00+00
+(1 row)
+
+movies=> 
+```
+
+## User defined data types
+
+
+## CREATE DOMAIN data type
+
+1. `CREATE DOMAIN` statement creates a user-defined data type with a range, optional DEFAULT, NOT NULL and CHECK constraint
+2. They have to be unique within a schema scope. Cannot be re-use outside of scope where they are defined.
+3. Help to STANDERDIZE your database data types in one place.
+4. A domain data type is a COMMON data type and can be RE-USE in multiple columns. Write once and share
+5. NULL is default
+6. Composite Type: Only Single Value return
+
+Syntax to create new domain is follows:
+
+```sql
+CREATE DOMAIN name AS data_type constraint
+```
+
+**Example 1:**
+
+```sql
+create domain addr varchar(100) not null;
+
+
+create table locations(
+    address addr
+);
+
+insert into values (address) values ('123 london');
+
+select * from locations;
+```
+
+**Exmaple 2: Create a domain `positive_numeric` which accepts only positive values.**
+
+```sql
+create domain positive_numeric int not null check (value > 0);
+
+create table sample(
+    sample_id serial primary key,
+    value_num positive_numeric
+);
+
+insert into sample (value_num) values (10);
+
+select * from sample;
+```
+
+**Exmaple 3: Create a domain `us_postal_code` which accepts only valid is postal code.**
+
+```sql
+create domain us_postal_code text 
+check (
+	value ~ '^\d{5}$'
+	or value ~ '^\D{5}-\d{4}$'
+);
+
+create table addresses(
+	address_id serial primary key,
+	postal_code us_postal_code
+);
+
+insert into addresses (postal_code) values ('10000');
+
+select * from address;
+```
+
+**Exmaple 4: Create a domain `proper_email` which accepts only valid email.**
+
+```sql
+create domain proper_email varchar(150) 
+check ( value ~ '^[a-zA-Z0-9]+@[a-zA-Z0-9]\.[a-zA-Z]{2,5}$' );
+
+create table clients_names
+(
+	client_name_id serial primary key,
+	mail proper_email
+);
+
+insert into clients_names  (mail)
+values
+('aabbb@m.com12');
+
+select * from clients_names;
+```
+
+**Exmaple 5: Create an enumeration type domain**
+
+```sql
+create domain valid_color varchar(10)
+check ( value in ('red', 'green', 'blue'));
+
+create table colors(
+	color valid_color
+);
+
+insert into colors
+values
+('red'),
+('green');
+
+select * from colors;
+```
+
+### To get a list of all domain types in the schema:
+
+```sql
+SELECT typname
+FROM pg_catalog.pg_type
+JOIN pg_catalog.pg_namespace
+ON pg_namespace. oid = pg_type.typnamespace
+WHERE
+typtype = 'd' and nspname = 'public';  -- d is for domain type and nspname for schema
+```
+
+##
