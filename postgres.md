@@ -1632,5 +1632,74 @@ CREATE TABLE t_products (
 );
 ```
 
+The foreign key constraint name have the following convention:
+
+```text
+tablename_columnname_fkey
+```
+
+We can delete the foreign key constraint as follows:
+
+```sql
+alter table t_products
+drop constraint t_products_supplier_id_fkey;
+```
+
+**Example 2: Adding foreign key to an existing table**
+
+```sql
+ALTER TABLE t_products
+ADD CONSTRAINT t_products_supplier_id_fkey FOREIGN KEY (supplier_id) REFERENCES t_suppliers (supplier_id);
+```
 
 
+### Check constraint
+
+1. A CHECK constraint is a kind of constraint that allows you to specify if values in a column must meet a specific requirement.
+1. The CHECK constraint uses a Boolean expression to evaluate the values before they are inserted or updated to the column.
+1. If the values pass the check, PostgreSQL will insert or update these values to the column. Otherwise, PostgreSQL will reject the changes and issue a constraint violation error.
+
+
+**Example 1: Creating check constraint on new table**
+
+```sql
+CREATE TABLE staff (
+    staff_id SERIAL PRIMARY KEY,
+    first_name VARCHAR (50),
+    last_name VARCHAR (50),
+    birth_date DATE CHECK (birth_date > '1900-01-01'),
+    joined_date DATE CHECK (joined_date > birth_date),
+    salary numeric CHECK (salary > 0)
+);
+```
+
+**Example 2: Creating check constraint on existing table**
+
+```sql
+
+-- Define CHECK constraint for existing tables
+CREATE TABLE prices (
+    price_id SERIAL PRIMARY KEY,
+    product_id INT NOT NULL,
+    price NUMERIC NOT NULL,
+    discount NUMERIC not null,
+    valid from DATE not null
+);
+
+-- adding check constraint
+alter table prices
+add constraint price_check 
+check (
+    price > 0
+    and discount >= 0
+    and price > discount
+);
+
+-- renaming constraint
+alter table prices
+rename constraint price_check to price_discount_check;
+
+-- dropping constraint
+alter table prices
+drop constraint price_discount_check;
+```
