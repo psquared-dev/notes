@@ -1416,3 +1416,221 @@ create table cron_jobs(
 -- testing with insert
 insert into cron_job (cron_job_id) values (1);
 ```
+
+## Constraint
+
+1. Constraints are like 'gate keepers'
+1. Controls the kind of data goes into the database
+1. Constraints are the rules enforced on data columns on table
+1. These are used to prevent invalid data from being entered into the database.
+1. They ensures the accuracy and reliability of the data in the database
+1. Constraints can be added on:
+    Table: table level constraints are applied to the whole table
+    Coloum: column level constraints are applied only to one column
+
+
+### Types of constraints
+
+Type | Desc
+-----|--------------------------------------
+`NOT NULL` | Field must have values
+`UNIQUE` | Only unique values are allowed
+`DEFAULT` | Ability to set DEFAULT values
+`PRIMARY KEY` | Uniquely identifies each _ row/record in a database table
+`FOREIGN KEY` | Constrains data based on columns in other tables
+`CHECK` | Checks all values meet specific criterias
+
+### NOT NULL constraints
+
+1. `NULL` represents unknown or information missing.
+1. `NULL` is not the same as an empty string or the number zero.
+1. To check if a value is `NULL` or not, you use the `IS NULL` boolean operator
+1. You create `NOT NULL` constraint on a table column as follows;
+
+```sql
+CREATE TABLE table_name (
+    column_name data_type NOT NULL,
+) ;
+```
+
+Example:
+
+```sql
+--  create table
+create table table_m(
+    id serial primary key,
+    tag text not null
+);
+
+select * from table_m;
+
+insert into table_n (tag) values ('ADAM');
+
+-- this will result in error
+insert into table_n (tag) values (null);
+
+-- empty string is allowed
+insert into table_n (tag) values ('');
+```
+
+**Example 2: Adding not null constraint to an existing table**
+
+```sql
+create table table_nn2(
+    id serial primary key,
+    tag text
+);
+
+alter table table_nn2
+alter column tag set not null;
+```
+
+### UNIQUE constraints
+
+1. make sure that values stored in a column or a group of columns are unique
+1. INSERT: When a `UNIQUE` constraint is in place, every time you insert a new row, it checks if the value is already in the table.
+1. UPDATE:  The same process is carried out for updating existing data.
+1. You create `UNIQUE` constraint on a single column, we use the following syntax;
+
+**Example 1: Creating column with `Unique`  constraint**
+
+```sql
+CREATE TABLE table_emails (
+    id serial primary key,
+    email text unique
+);
+```
+
+**Example 2: Creating `Unique` constraint on multiple columns**
+
+```sql
+CREATE TABLE table_products (
+    id serial primary key,
+    product_code varchar(10),
+    product_name text,
+);
+
+
+alter table table_products
+add constraint unique_product_code unique (product_code, product_name);
+```
+
+### DEFAULT constraint
+
+**Example 1: Seta default value on a new table**
+
+```sql
+create table employees(
+    employee_id serial primary key,
+    first_name varchar(50),
+    second_name varchar(50),
+    is_enable varchar(2) default 'Y',
+);
+```
+
+**Example 2: Seta default value on existing table**
+
+```sql
+create table employees(
+    employee_id serial primary key,
+    first_name varchar(50),
+    second_name varchar(50),
+    is_enable varchar(2) default 'Y',
+);
+
+-- set column, assuming default doesn't exist in the is_enable column
+alter table employees
+alter column is_enable set default 'N';
+
+alter table employees
+alter column is_enable drop default;
+```
+
+### PRIMARY KEY Constraint
+
+1. uniquely identifies each record in a database table
+1. There can be more UNIQUE columns, but only one primary key in a table
+1. A primary key is a field in a table, which uniquely identifies each row/record in a database table
+1. Primary keys must contain unique values
+1. A table can have only one primary key, which may consist of single or multiple fields
+1. When multiple fields are used as a primary key, they are called a composite key
+1. They are same as `UNIQUE NOT NULL`
+
+
+**Example 1: Creating Primary Key on a single column**
+
+```sql
+CREATE TABLE table_items (
+    item_id INTEGER PRIMARY KEY,
+    item_name VARCHAR (100) NOT NULL
+);
+```
+
+This creates a primary key with the constraint name:
+
+```text
+table_items_pkey
+```
+
+**Example 2: Dropping Primary Key on a table**
+
+```sql
+alter table table_items
+drop constraint table_items_pkey;
+```
+
+**Example 3: Adding primary key to existing table**
+
+```sql
+alter table table_items
+add primary key (item_id);
+
+--  we can also add multiple columns to the primary key
+-- this is called composite key
+alter table table_items
+add primary key (item_id, item_name);
+
+-- we can also define composite key while defining the table
+CREATE TABLE table_items (
+    item_id INTEGER,
+    item_name VARCHAR (100) NOT NULL,
+    primary key (item_id, item_name)
+);
+```
+
+### Foreign Key Constraint
+
+1. Foreign key play a vital most important role in PostgreSQL.
+1. A foreign key is a column or a group of columns in a table that reference the primary key of another table
+1. Also in general words, foreign key in PostgreSQL is defined as the first table that has
+reference to the primary key of the second table.
+
+The following is the syntax to create foreign key constraint:
+
+```sql
+CREATE TABLE child_table_name (
+    columnname data_type PRIMARY KEY,
+    foreign key (some_column_name) references parent_table (column_name)
+);
+```
+
+**Example 1: Create foreign key**
+
+```sql
+-- parent table
+CREATE TABLE t_suppliers(
+    supplier_id INT PRIMARY KEY,
+    supplier_name VARCHAR (100) NOT NULL
+);
+
+-- child table
+CREATE TABLE t_products (
+    product_id INT PRIMARY KEY,
+    product_name VARCHAR (100) NOT NULL,
+    supplier_id INT NOT NULL,
+    FOREIGN KEY (supplier_id) REFRENCES t_suppliers (supplier_id)
+);
+```
+
+
+
