@@ -1703,3 +1703,123 @@ rename constraint price_check to price_discount_check;
 alter table prices
 drop constraint price_discount_check;
 ```
+
+## Sequences
+
+Sequences:
+
+
+**Example 1: Create a sequence**
+
+```sql
+create sequence if not exists test_seq;
+```
+
+**Example: 2: Advance sequence and return new value**
+
+```sql
+select nextval('test_seq');
+```
+
+**Example 3: Return most current value of the sequence**
+
+
+```sql
+select currval('test_seq');
+```
+
+**Example 4: Set a sequence value**
+
+```sql
+select setval('test_seq', 100) 
+```
+
+The `setval()` accepts a third argument called `is_called`. The `is_called` is a boolean value indicating whether the sequence's `last_value` should be set to the new value. If `is_called` is `true`, the sequence's `last_value` will be set to the `new_value`. If is_called is `false`, the sequence's `last_value` will not be changed.
+
+**Example 5: Create sequence with start value**
+create sequence if not exists test_seq_2 start with 200
+
+### Altering Sequences
+
+**Example 1: Restarting Sequence**
+
+```sql
+alter sequence test_seq restart with 200;
+```
+
+**Example 2: Renaming Sequence**
+
+```sql
+alter sequence test_seq rename to new_test_seq;
+```
+
+
+### Creating Sequence with START WITH, INCREMENT, MINVALUE, MAXVALUE
+
+```sql
+create sequence if not exists test_seq3
+increment 50
+minvalue 400
+maxvalue 5000
+start with 500
+```
+
+### Creating a sequence using a specific data type
+
+Specify the data type of a sequence (`SMALLINT` | `INT` | `BIGINT`). Default is `BIGINT`.
+
+```sql
+create sequence if not exists test_seq_smallint as smallint;
+
+create sequence if not exists test_seq_int as int;
+```
+
+### Creating a descending sequence
+
+```sql
+create sequence seq_desc
+increment -1
+minvalue 1
+maxvalue 3
+start 3
+cycle
+```
+
+* `CYCLE` in Ascending Sequence: When reaches `MAXVALUE`, reset to `MINVALUE`
+* `CYCLE` in Descending Sequence: When reaches `MINVALUE`, reset to `MAXVALUE`
+
+
+### Deleting Sequence
+
+```sql
+drop sequence test_seq;
+```
+
+### Attach Sequence to table
+
+```sql
+
+```
+
+
+
+p         |  c         |  pk
+----------|------------|--------------------
+veg       | veg        | 1
+fruits    | fruits     | 2
+
+
+select tt.c as p, items.name as c, items.pk, from items
+inner join tt
+on tt.pk = items.parent
+
+p         |  c         |  pk
+----------|------------|--------------------
+fruits    | apple      | 3
+fruits    | banana     | 4
+
+
+p         |  c                |  pk
+----------|-------------------|--------------------
+apple    | apple red         | 5
+apple    | apple orange      | 6
