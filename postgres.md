@@ -1798,9 +1798,29 @@ drop sequence test_seq;
 ### Attach Sequence to table
 
 ```sql
+-- create the table
+create table users2(
+    user_id int primary key,
+    user_name varchar(50)
+);
 
+create sequence users2_user_id start with 100 owned by users2.user_id;
+
+alter table users2 
+alter column user_id set default nextval('users2_user_id');
 ```
 
+The `OWNED BY` clause ensures that the sequence is automatically dropped when the owning column or table is dropped.
+
+
+### Listing all sequence in a database
+
+```sql
+SELECT relname sequence_name
+FROM pg_class
+WHERE
+relkind = 'S'
+```
 
 
 p         |  c         |  pk
