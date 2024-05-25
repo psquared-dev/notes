@@ -1822,6 +1822,195 @@ WHERE
 relkind = 'S'
 ```
 
+### Sharing Sequence
+
+```sql
+-- create a sequence
+create sequence common_fruit_seq start with 100;
+
+-- create table
+create table apples(
+    fruit_id int default nextval('common_fruit_seq') not null,
+    fruit_name varchar(50)
+);
+
+-- create another table
+create table mangoes(
+    fruit_id int default nextval('common_fruit_seq') not null,
+    fruit_name varchar(50)
+);
+```
+
+### Creating Alphanumeric Sequence
+
+```sql
+create sequence alpha_seq;
+
+create table contacts(
+	contact_id text not null default ('ID' || nextval('alpha_seq')),
+	contact_name varchar(150)
+);
+
+insert into contacts (contact_name)
+values ('aa');
+```
+
+## String Functions
+
+```sql
+-- returns n characters from the left
+select left('abcdef', 2)
+
+-- returns everything except the last two chatacters
+select left('abcdef', -2)
+
+-- returns everything except the first two chatacters
+select right('abcd', -2)
+
+-- returns n characters from the right
+select right('abcd', 1)
+
+-- convert to uppercase
+select  upper('aaaBBcc aabb')
+
+-- convert to lowercase
+select lower('aaaBBBcccc Abbc')
+
+-- capitalize first char of every word in the string
+select initcap('aaabbbbcc bbcc') 
+
+-- reverse the string
+select reverse('abcdf') 
+
+-- PostgreSQL SPLIT_PART() function splits a string on a specified delimiter and returns the nth substring.
+-- SPLIT PART (string, delimiter, position)
+select split_part('a,b,c', ',', 2) -- output b
+
+select split_part('one|two|three', '|', 1)
+
+-- note that conversion from date to varchar is required, otherwise an error will be thrown
+select split_part(current_date::varchar, '-', 1)
+
+-- trim from left
+select ltrim('         abcdef')
+
+-- trim from right
+select rtrim('abcdef          ')
+
+-- trim from both side
+select btrim('         abcdef          ')
+
+-- additional characters to trip can be specifies using the second argument
+-- trim space and char 'a'
+select ltrim('         abcdef', ' a'); 
+
+
+-- #########################
+/*
+LPAD function pads a string on the left to a specified length with a sequence of characters.
+RPAD function pads a string on the right to a specified length with a sequence of characters.
+*/
+
+--LPAD (string, length[, fill])
+--RPAD (string, length[, fill])
+
+--The fill argument is optional. If you omit the fill argument, its default value is a space.
+
+select lpad('db', 15, '*');
+
+      lpad       
+-----------------
+ *************db
+(1 row)
+
+
+
+select rpad('db', 15, '*');
+
+      rpad       
+-----------------
+ db*************
+(1 row)
+
+
+--length() and char_length()  both returns the number of charcters in the string
+
+SELECT LENGTH('こんにちは');
+SELECT char_LENGTH('こんにちは');
+
+-- this differs from other dbs like MySQL, where length() returns 
+-- length of the string measured in bytes. 
+-- and CHAR_LENGTH() returns the length of the string measured in characters.
+
+-- POSITION function
+-- ###########################
+/*
+1. PostgreSQL POSITION() function returns the location of a substring in a string.
+2. POSITION (substring in string)
+3. returns an integer that represents the location of the substring within the string
+4. returns the first instance of the substring in the string.
+5. searches for the substring case-insensitively.
+I
+*/
+
+select position ('po' in 'postgres');
+
+ position 
+----------
+        1
+(1 row)
+
+
+select position ('ipo' in 'postgres');
+
+ position 
+----------
+        0
+(1 row)
+
+
+select strpos('postgres', 'po');
+
+ strpos 
+--------
+      1
+(1 row)
+
+--Difference between STRPOS and POSITION function
+--1. Those functions do the exactly same thing and differ only in syntax. Documentation for strpos() says:
+--Location of specified substring (same as position (substring in string), but note the reversed argument order)
+--2. Reason why they both exist and differ only in syntax is that POSITION (str1 IN str2) is defined by ANSI SQL
+--standard.
+--If PostgreSQL had only strpos() it wouldn't be able to run ANSI SQL queries and scripts.
+
+
+--  extract a substring from a string.
+select substring('abc def', 1, 2);
+
+ substring 
+-----------
+ ab
+(1 row)
+
+
+select repeat('*', 10);
+
+   repeat   
+------------
+ **********
+(1 row)
+
+
+select replace('aa bb cc dd ae', 'a', '$');
+
+    replace     
+----------------
+ $$ bb cc dd $e
+(1 row)
+```
+
+
+
 
 p         |  c         |  pk
 ----------|------------|--------------------
