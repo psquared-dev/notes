@@ -2009,8 +2009,44 @@ select replace('aa bb cc dd ae', 'a', '$');
 (1 row)
 ```
 
+## Aggregate functions
 
+```sql
+select
+	count(*)
+from
+	movies m 
+	
+	
+select
+	count(movie_length)
+from
+	movies m	
+	
 
+select
+	count( distinct movie_lang)
+from
+	movies m	
+
+select count(director_id ) from movies m 
+
+select count(distinct  director_id ) from movies m 
+
+select sum(revenues_domestic) from movies_revenues mr 
+
+select min(movie_length)  from movies m 
+
+select max(movie_length)  from movies m 
+
+select greatest(10, 20, 40)
+
+select least (10, 20, 40)
+
+select avg(m.movie_length)::numeric(10,2) from movies m 
+
+select round(avg(m.movie_length), 2) from movies m 
+```
 
 p         |  c         |  pk
 ----------|------------|--------------------
