@@ -129,6 +129,16 @@ To create persistent data storage for mongo:
 docker run -d -v $PWD/db:/data/db mongo
 ```
 
+Tpo create persistent data storage for mysql:
+
+```bash
+docker run --name mysql -d \
+    -p 3306:3306 \
+    -e MYSQL_ROOT_PASSWORD=pass \
+    -v mysql:/var/lib/mysql \
+    mysql:8
+```
+
 To execute the command in a running container:
 
 ```bash
