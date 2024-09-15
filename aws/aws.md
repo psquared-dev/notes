@@ -5,7 +5,7 @@
 * By default, an IAM user has non explicty deny for all AWS services.
 * Never store API keys on EC2 instance.
 * IAM users with even admin access don't have access to billing details. To enable billing details for IAM user, enable "IAM user and role access to Billing information" setting in root user Accounting section.
-* 
+* At a point IAM users can atmost have 2 access keys
 
 ---------------------------
 
@@ -16,7 +16,7 @@
 
 ---------------------------
 
-### VPC
+## VPC
 
 * VPC spans multiple AZs but housed within a single region - This allows you to provision redundant resources in separate AZs while having them accessible on the same network.
 * You can only have 5 VPCs per region
@@ -25,7 +25,7 @@
 
 ---------------------------
 
-### NACLs
+## NACLs
 
 * NACLs are associated with subnets in a VPC and spans Availability Zone.
 * NACLs are stateless, means you need to explicitly specify inbound and outbound rules.
@@ -34,7 +34,7 @@
 
 ---------------------------
 
-### Security Groups
+## Security Groups
 
 * It is applicable to instances only. 
 * It can be attached to multiple instances.
@@ -43,10 +43,12 @@
 ---------------------------
 
 
-### ENI
+## ENI
 
 * An instance can connect to multiple subnets using Elastic Network Interfaces (ENIs).
 * Elastic Network Interfaces (ENIs) are bounded to a specific AZ. You can not attach an ENI to an EC2 instance in a different AZ.
+* Elastic IP is associated with ENI.
+* Elastic IP can be remapped across AZs.
 
 ---------------------------
 
@@ -54,6 +56,8 @@
 ### EC2
 
 * public ip address only changes when you stop and start the server. If you don't want this then use elastic IP (but a better approach would be to use route 53).
+* An EC2 instance can have multiple security groups.
+* There is no change for stopped instances.
 
 ---------------------------
 
@@ -65,13 +69,14 @@ We know we can stop, terminate instances
 ---------------------------
 
 
-### EBS
+## EBS
 
 * EBS is bound to a specific AZ.
 * By default, the Root volume type will be deleted as its "Delete On Termination" attribute checked by default. Any other EBS volume types will not be deleted as its "Delete On Termination" attribute disabled by default.
 * When creating EC2 instances, you can only use the following EBS volume types as boot volumes: gp2, gp3, io1, io2, and Magnetic (Standard).
 * To encrypt an unencrypted EBS you need to creat a snapshot first.
 * It is network drive not phsically attached to EC2.
+* To attach a EBS volume to EC2, EBS and EC2 must have on the same AZ.
 
 ### EBS - Multi Attach
 
@@ -270,7 +275,28 @@ Instead of pointing to an IP, an alias record set contains a pointer to an AWs s
 
 ### S3
 
+Objects stay within an AWS region and synced across all AZ's for extremely high availability and durability
+
 #### S3 Storage class
 
 ![alt text](./images/s3-storage-s3.png)
+
+-----------------------
+
+## Cloudfront
+
+### CloudFront vs S3 Cross Region Replication
+
+CloudFront:
+
+* Global Edge network
+* Files are cached for a TTL (maybe a day)
+* Great for static content that must be available everywhere
+
+S3 Cross Region Replication:
+
+* Must be setup for each region you want replication to happen
+* Files are updated in near real-time
+* Read only
+* Great for dynamic content that needs to be available at low-latency in few regions
 
