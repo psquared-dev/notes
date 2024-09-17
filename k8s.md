@@ -54,6 +54,12 @@ This displays `node` on which the pod is running.
 $: kubectl delete po pod_name
 ```
 
+## Delete all pods
+
+```bash
+kubectl delete po --all
+```
+
 ## Editing a pod
 
 ```bash
@@ -79,6 +85,87 @@ $: kubectl create -f file_name.yml
 ```bash
 $: kubectl apply -f file_name.yml
 ```
+
+## Get all replicaset 
+
+```bash
+kubectl get rs
+```
+
+## Describe replicaset
+
+```bash
+kubectl describe rs replica_set_name
+```
+
+## Delete replicaset
+
+```bash
+kubectl delete rs replica_set_name
+```
+
+## Sample Re
+
+
+## After updating the ReplicaSet resource, following commands can be used to apply the updated configuration:
+
+```bash
+kubectl replace -f file_name.yml
+
+# the following two commands doesn't require to update the replica count in `yaml` file.
+
+kubectl scale --replicas=6 -f file_name.yml 
+
+kubectl scale --replicas=6 rs replica_name
+```
+
+## View all deployment, replicaset and pods
+
+```bash
+kubectl get all
+```
+
+## Create deployment imperatively
+
+```bash
+kubectl create deploy httpd-frontend --image=httpd:2.4-alpine --replicas=3
+```
+
+
+## View the status of the deployment
+
+```bash
+kubectl rollout status deploy deploy_name
+```
+
+## View rollout history
+
+```bash
+kubectl rollout history deploy deploy_name
+```
+
+## Undo rollout
+
+```bash
+kubectl rollout undo deploy deploy_name
+```
+
+
+## Record deployment
+
+```bash
+kubectl create -f deploy.yml --record # record change while creating
+kubectl edit deploy deploy_name  --record  # record change while editing
+```
+
+##  Change image of existing deployment 
+
+```bash
+kubectl set image deploy deploy_name nginx=nginx:1.18-perl --record
+kubectl edit deploy deploy_name --record
+```
+
+We can use any one of the above command.
 
 
 
