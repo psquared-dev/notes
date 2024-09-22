@@ -1,11 +1,11 @@
 ## IAM
 
-* By default, a explicty deny, always overrides explicit allow.
+* By default, a explicitly deny, always overrides explicit allow.
 * IAM policy can only be attached to user and groups, it can't be attached to things like EC2, S3.
-* By default, an IAM user has non explicty deny for all AWS services.
+* By default, an IAM user has non explicitly deny for all AWS services.
 * Never store API keys on EC2 instance.
 * IAM users with even admin access don't have access to billing details. To enable billing details for IAM user, enable "IAM user and role access to Billing information" setting in root user Accounting section.
-* At a point IAM users can atmost have 2 access keys
+* At a point IAM users can at-most have 2 access keys
 
 ---------------------------
 

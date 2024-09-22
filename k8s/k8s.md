@@ -38,6 +38,7 @@ kubectl run nginx --image=nginx --labels="key1=val1,key2=val2"
 
 ```bash
 kubectl get po
+kubectl get po --watch
 ```
 
 ## Get details on the pod
@@ -157,7 +158,6 @@ kubectl rollout history deploy deploy_name
 ```bash
 kubectl rollout undo deploy deploy_name
 ```
-
 
 ## Record deployment
 
@@ -561,9 +561,219 @@ If pod has multiple containers then we need to specify container as follows:
 kubectl exec ubuntu-sleeper -c container1 -- whoami
 ```
 
+## Create service account
+
+```bash
+kubectl create serviceaccount dashboard-sa
+kubectl create sa dashboard-sa
+```
+
+## Get all nodes
+
+```bash
+kubectl get no
+```
+
+## Create taint
+
+```bash
+kubectl taint nodes node01 spray=mortein:NoSchedule
+```
+
+## Untaint a node
+
+```bash
+kubectl taint nodes controlplane node-role.kubernetes.io/control-plane:NoSchedule-
+```
 
 
+## Add label to node
+
+```bash
+kubectl label node node01 color=blue
+```
+
+## View logs from a specific pod
+
+```bash
+kubectl logs kibana -n elastic-stack 
+```
+
+## Readiness probe
+
+Types of Readiness Probes:
+
+1. HTTP Probe: Checks if an HTTP endpoint is responding.
+1. TCP Probe: Checks if a TCP socket is open.
+1. Exec Probe: Runs a command inside the container to check its readiness.
+
+```bash
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 80
+        initialDelaySeconds: 10  # Wait for 10 seconds before starting the probe
+        periodSeconds: 5         # Check every 5 seconds
+        timeoutSeconds: 1        # Probe times out after 1 second
+        failureThreshold: 3      # If it fails 3 times, it’s considered not ready
+        successThreshold: 1      # It needs 1 success to be considered ready
+```
+
+Similarly, `tcpSocket` and `exec` can be configured as follows:
+
+```bash
+ readinessProbe:
+        tcpSocket:
+            port: 3306
+```
+
+```bash
+ readinessProbe:
+        exec:
+            command:
+                - cat
+                - /app/is_ready
+```
+
+## View live logs
+
+```bash
+kubectl logs -f pod_name
+```
+
+If pod has multiple container, then we need to specify the container name.
+
+```bash
+kubectl logs -f pod_name container_name
+```
+
+## View memory consumption
+
+```bash
+kubectl top node
+```
+
+```bash
+kubectl top pod
+```
+
+## Specifying selector
+
+```bash
+kubectl get po --selector app=some_value
+```
+
+To specify multiple selector separate them with comma.
+
+```bash
+kubectl get all --selector env=prod,bu=finance,tier=frontend
+```
+
+## View jobs
+
+```bash
+kubectl get jobs
+```
+
+## Create a job
+
+```bash
+apiVersion: batch/v1
+kind: Job
+metadata:
+    name: math-add-job
+spec:
+    template:
+        spec:
+            containers:
+            -   name: math-add
+                image: ubuntu
+                command: ['expr', '3', '+' '2']
+            restartPolicy: Never
+```
+
+## Create cron job
+
+```bash
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: throw-dice-cron-job
+spec:
+  schedule: "30 21 * * *"
+  jobTemplate:
+    spec:
+      completions: 3
+      parallelism: 3
+      backoffLimit: 25 # This is so the job does not quit before it succeeds.
+      template:
+        spec:
+          containers:
+          - name: throw-dice
+            image: kodekloud/throw-dice
+          restartPolicy: Never
+```
 
 
+##  Get network policies
 
+```bash
+kubectl get netpol
+```
 
+## Defining network policy
+
+```bash
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: internal-policy
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      name: internal
+  policyTypes:
+  - Egress
+  - Ingress
+  ingress:
+    - {}
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          name: mysql
+    ports:
+    - protocol: TCP
+      port: 3306
+
+  - to:
+    - podSelector:
+        matchLabels:
+          name: payroll
+    ports:
+    - protocol: TCP
+      port: 8080
+
+  - ports:
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP
+```
+
+## View ingress resource in all namespaces
+
+```bash
+k get ingress --all-namespaces
+# or
+k get ingress -A
+```

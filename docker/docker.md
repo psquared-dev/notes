@@ -66,6 +66,12 @@ To show the logs
 docker logs <container_name|container_id> 
 ```
 
+View live logs:
+
+```bash
+docker logs -f <container_name|container_id> 
+```
+
 To remove the container
 
 ```bash
