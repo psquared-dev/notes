@@ -1,16 +1,22 @@
 ## IAM
 
+* IAM is a global service.
 * By default, a explicitly deny, always overrides explicit allow.
 * IAM policy can only be attached to user and groups, it can't be attached to things like EC2, S3.
-* By default, an IAM user has non explicitly deny for all AWS services.
+* By default, an newly created IAM user has non explicitly deny for all AWS services.
 * Never store API keys on EC2 instance.
 * IAM users with even admin access don't have access to billing details. To enable billing details for IAM user, enable "IAM user and role access to Billing information" setting in root user Accounting section.
 * At a point IAM users can at-most have 2 access keys
+* User can have one or more policies.
 
 ---------------------------
 
 ### IAM Roles
 
+* A role is something that another entity can assume and in doing so acquires the specific permission defined by the role.
+* Entities that can assume a role include AWS resources (such as EC2) or non-AWS account holder who may need temporary access to AWS resources (through a service like Active Directory).
+* Role must be used in such scenarios because policy can't be directly attached to AWS resources.
+* Other user can assume a role for temporary access to AWS accounts and resources having something like active directory or single sign-on service (facebook, google) assume an "identity provider access" role.
 * Only one role can be attached to EC2 instance at a time.
 * Roles don't have API credentials (only users can have them).
 
@@ -21,13 +27,41 @@
 * VPC spans multiple AZs but housed within a single region - This allows you to provision redundant resources in separate AZs while having them accessible on the same network.
 * You can only have 5 VPCs per region
 * Subnets resides in one AZ.
+* Using VPC we can extend on-prem network into the cloud.
+* All subnets in default VPC are public.
+* IP of the default vpc is 172.31.0.0/16
 
+---------------------------
+
+## Internet Gateway
+
+* IG is a component what allows communication between instances in your VPC and the internet.
+* Provides NAT translation for instances having public IP.
+* Only 1 IG can be connected to 1 VPC at a time.
+* IG must be connected to a VPC if resources inside the VPC needs to connect to resources in the open internet.
+
+---------------------------
+
+## Route Table
+
+* A route table contains a set to rules, that are used to determine where network traffic is directed.
+* By default, all subnets traffic is allowed to each other subnet within the VPC, which is called the local route. The local route can't be modified.
+* default VPC has the main route table.
+
+---------------------------
+
+## Subnets
+
+* A Subnet must resides in one AZ. 
+* A subnet must be associated with the route table.
+* public subnet: A subnet that has route to the internet
+* private subnet: A subnet that doesn't have route to the internet
 
 ---------------------------
 
 ## NACLs
 
-* NACLs are associated with subnets in a VPC and spans Availability Zone.
+* You can reuse the same NACL across multiple subnets, even if those subnets are in different AZs.
 * NACLs are stateless, means you need to explicitly specify inbound and outbound rules.
 * Rules are evaluated in order, starting with the lowest rule number. If traffic is denied at the lower rule no. and allowed at the higher rule no. the allow rule will be ignored and traffic will be denied.
 * Subnet can be associated with only one NACL at a time.
@@ -38,6 +72,7 @@
 
 * It is applicable to instances only. 
 * It can be attached to multiple instances.
+* It is stateful.
 * All rules are evaluated before deciding  to allow traffic.
 
 ---------------------------
@@ -55,9 +90,9 @@
 
 ### EC2
 
-* public ip address only changes when you stop and start the server. If you don't want this then use elastic IP (but a better approach would be to use route 53).
+* Public ip address only changes when you stop and start the server. If you don't want this then use elastic IP (but a better approach would be to use route 53).
 * An EC2 instance can have multiple security groups.
-* There is no change for stopped instances.
+* There is a charge even for stopped instances.
 
 ---------------------------
 
@@ -68,15 +103,40 @@ We know we can stop, terminate instances
 
 ---------------------------
 
+## EC2 IP Address
+
+* All EC2 instance have private IP address.
+* Auto-assigning of public IP is based on setting of the selected subnet that you are provisioning the instance in.
+
+---------------------------
+
+## Elastic IP
+
+* Elastic IP is a public IP
+* 
+
+---------------------------
+
+## AMI
+
+A pre-configured package required to launch EC2 instance, includes an:  
+* operating system
+* software package
+* block device mapping
+* root storage type
+
+---------------------------
 
 ## EBS
 
 * EBS is bound to a specific AZ.
 * By default, the Root volume type will be deleted as its "Delete On Termination" attribute checked by default. Any other EBS volume types will not be deleted as its "Delete On Termination" attribute disabled by default.
 * When creating EC2 instances, you can only use the following EBS volume types as boot volumes: gp2, gp3, io1, io2, and Magnetic (Standard).
-* To encrypt an unencrypted EBS you need to creat a snapshot first.
-* It is network drive not phsically attached to EC2.
+* To encrypt an unencrypted EBS you need to create a snapshot first.
+* It is a network drive not physically attached to EC2.
 * To attach a EBS volume to EC2, EBS and EC2 must have on the same AZ.
+* Pre-warming: the first time data is written to an EBS volume, AWS runs a industry standard deletion process to overwrite any existing data that may be on the volume. During this process volume performance will be degraded. As a solution, you can "pre-warm" volume by writing dummy data on it before it is used in the production.
+
 
 ### EBS - Multi Attach
 
@@ -97,7 +157,7 @@ We know we can stop, terminate instances
 
 * EBS volumes are network drives with good but "limited" performance
 * If you need a high-performance hardware disk, use EC2 Instance Store
-
+* It is physically attached to the host which is running the instance.
 * Better I/O performance
 * EC2 Instance Store lose their storage if they're stopped (ephemeral)
 * Good for buffer/cache/scratch data / temporary content

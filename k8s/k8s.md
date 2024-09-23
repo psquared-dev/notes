@@ -5,7 +5,7 @@
 kubectl get nodes
 ```
 
-## Get teh k8s version
+## Get the k8s version
 
 ```bash
 $: kubectl version
@@ -776,4 +776,29 @@ spec:
 k get ingress --all-namespaces
 # or
 k get ingress -A
+```
+
+## Create ingress resource
+
+```bash
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: test-ingress
+  namespace: critical-space
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /pay
+        pathType: Prefix
+        backend:
+          service:
+           name: pay-service
+           port:
+            number: 8282
 ```
