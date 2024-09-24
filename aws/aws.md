@@ -108,12 +108,26 @@ We know we can stop, terminate instances
 * All EC2 instance have private IP address.
 * Auto-assigning of public IP is based on setting of the selected subnet that you are provisioning the instance in.
 
+------------------------------
+
+## EC2 placement groups
+
+The following are types of placement groups
+
+1. cluster
+1. spread
+1. partition
+
+* If an instance in a placement group is stopped, and once it is started again it will continue to be the member of the placement group.
+
+* It is possible, if more instances are are added at a later time to the placement group or if a placement group is stopped and started again, to receive an "insufficient capacity error". It can be resolved by stopping all instances and starting again.
+
 ---------------------------
 
 ## Elastic IP
 
 * Elastic IP is a public IP
-* 
+* Elastic IP is region specific
 
 ---------------------------
 
@@ -166,6 +180,33 @@ A pre-configured package required to launch EC2 instance, includes an:
 
 ---------------------------
 
+## Auto Scaling
+
+* Auto scaling is a service provided by AWS that automates the process of increasing or decreasing the number of provisioned on-demand instances available for your application.
+
+* It increases or decreases the amount of instances based on a chosen cloudwatch metric. 
+
+* Auto scaling as 2 main components:
+    1. Launch template: The EC2 "template" used when the auto scaling group needs to provision an additional instance (i.e. AMI, instance type, user-data, storage, security groups, etc)
+
+    1. Auto Scaling group:
+        * All the rules and settings that govern if/when an EC2 instance is automatically provisioned or terminated.
+        * Number of MIN & MAX allows instances
+        * VPC & AZS to launch instances into If provisioned instances should receive traffic from a ELB Scaling policies (cloudwatch metrics thresholds that trigger scaling)
+        * SNS notifications (to keep you informed when scaling occurs)
+
+
+---------------------------
+
+## Bastion Host
+
+* It is an EC2 instance that lives in public subnet and it is used as gateway for traffic that is destined for instances that live in private subnets.
+
+
+## Nat Gateway
+
+* It is designed to provide EC2 instances that live in private subnets with a route to the internet. So that they can download software packages and updates.
+* Nat Gateway must be in public subnet.
 
 ### AMI 
 
@@ -180,6 +221,27 @@ A pre-configured package required to launch EC2 instance, includes an:
     * An AWS Marketplace AMI: an AMI someone else made (and potentially sells)
 * AMIs are built for a specific AWS Region, they're unique for each AWS Region. You can't launch an EC2 instance using an AMI in another AWS Region, but you can copy the AMI to the target AWS Region and then use it to create your EC2 instances.    
 
+---------------------------
+
+## Route 53
+
+Route 53 is a domain management service. It keys features are:
+
+1. Domain registration
+1. Domain name system service
+1. Health check (it sends automated requests over the internet to your application to verify that its reachable, available and functional)
+
+## Hosted Zones
+
+It is just a set of different records that tells route 53 what to do with the DNS request.
+
+## Alias Record Set
+
+Instead of an IP address alias record set point to an AWS specific resources such as:
+* elb
+* s3 bucket (static site enabled)
+* elastic beanstalk
+* cloudfront distribution
     
 ---------------------------
 
@@ -340,6 +402,8 @@ Objects stay within an AWS region and synced across all AZ's for extremely high 
 #### S3 Storage class
 
 ![alt text](./images/s3-storage-s3.png)
+
+For uploading big files use multipart upload.
 
 -----------------------
 
