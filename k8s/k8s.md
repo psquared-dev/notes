@@ -876,7 +876,7 @@ kubectl get pvc
 
 ## Using PVC in pod
 
-````bash
+```bash
 apiVersion: v1
 kind: Pod
 metadata:
@@ -893,3 +893,20 @@ spec:
       persistentVolumeClaim:
         claimName: myclaim
 ```
+
+## Get current config
+
+```bash
+kubectl config view
+```
+
+It reads fro default file `~/.kube/config`
+
+
+## Change context
+
+```bash
+kubectl config use-context prod-user@production
+```
+
+
