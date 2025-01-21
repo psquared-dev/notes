@@ -33,3 +33,29 @@ Push the changes:
 ```bash
 git push -u origin :old_name new_name
 ```
+
+## Git stash
+
+To stash do this:
+
+```bash
+git stash -u
+```
+
+The `-u` option also stashes the untracked changes.
+
+View stash list:
+
+```bash
+git stash list
+```
+
+Apply the last stash
+
+```bash
+git stash apply 0
+```
+
+
+
+
