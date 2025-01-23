@@ -67,5 +67,3 @@ in turn is in charge of serving one and only one connection.
     launching a new backend process to serve it until the connection ends and the process is, conse-
     quently, destroyed. The postmaster usually also starts some utility processes that are responsible
     for keeping PostgreSQL in good shape while it is running
-
-*     
