@@ -118,7 +118,7 @@ Characters strings types are general-purpose types suitable for;
 - numbers, and
 - symbols
 
-Three main types of CHARATER data:
+Three main types of CHARACTER data:
 
 Character | Types Notes
 ----------|-----------------------
@@ -355,7 +355,7 @@ SELECT CURRENT_TIME + interval '2 hours' as result;
 
 4. UUID is much much better than the SERIAL data type when it comes to 'uniquness' across systems as SERIAL data type generates only unique values within a single database.
 
-5. To create a UUID data type in PostgreSQL, you need a third part UUID algorithms to generate UUIDS e.g. `uuid-ossp`.
+5. To create a UUID data type in PostgreSQL, you need a third party UUID algorithms to generate UUIDS e.g. `uuid-ossp`.
 
 1. Enable third part UUID extensions first e.g.`uuid-ossp`.
 
