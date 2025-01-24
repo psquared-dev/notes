@@ -131,5 +131,210 @@ you to recognize each of them and their respective purposes.
     When a client connects to your cluster, a new process is spawned: this process, named the back-end process, is responsible for serving the client requests (meaning executing the queries and returning the results). You can see and count connections by inspecting the process list
 
 
+* PostgreSQL uses a process approach to concurrency instead of a multi-thread ap-proach. There are different reasons for this: most notably, the isolation and portability that a multi-process approach offers. Moreover, on modern hardware and software, forking a process is no longer so much of an expensive operation.
+
+* When you initialize the cluster with the `initdb` command, PostgreSQL builds the filesystem layout
+of the `PGDATA` directory and builds two template databases, named `template0` and `template1`. The template databases are used as a starting point to clone other new databases, which can then be used by normal users to connect to. In a freshly installed PostgreSQL cluster, you usually end up with a postgres database, used to allow the database administrator user postgres to connect to and interact with the cluster.
+
+* The `template1` database is the first database created when the system is initialized, and then it
+is cloned into `template0`. This means that the two databases are, at least initially, identical, and
+the aim of `template0` is to act as a safe copy for rebuilding in case it is accidentally damaged or
+removed.
+
+------------------
+
+* It is interesting to note that, alongside the two template databases, there’s a third database
+that is created during the installation process: the `postgres` database. That database belongs
+to the `postgres` user, which is, by default, the only database administrator created during the
+initialization process. This database is a common space to be used for connections instead of the
+template databases.
+
+    The name template indicates the real aim of these two databases: when you create a new data-
+    base, PostgreSQL clones a template database as a common base. This is somewhat like creating
+    a user home directory on Unix systems: the system clones a skeleton directory and assigns the
+    new copy to the user. PostgreSQL does the same—it clones template1 and assigns the newly
+    created database to the user that requested it.
+
+    What this also means is that whatever object you put into template1, you will find the very same object in freshly created databases. This can be really useful for providing a common base data-base and having all other databases brought to life with the same set of attributes and objects.
+
+    Nevertheless, you are not forced to use template1 as the base template; in fact, you can create your own databases and use them as templates for other databases. However, please keep in mind that, by default, (and most notably on a newly initialized system), the template1 database is the one that is cloned for the first databases you will create.
+
+    Another difference between template1 and template0, apart from the former being the default for new databases, is that you cannot connect to the latter. This is in order to prevent accidental damage to template0 (the safety copy).
+
+    It is important to note that the cluster (and all user-defined databases) can work even without the
+    template databases—the template1 and template0 databases are not fundamental for the other databases to run. However, if you lose the templates, you will be required to use another database as a template every time you perform an action that requires it, such as creating a new database.
+
+------------
+
+* If no option is specified, `psql` assumes your operating system user is trying to connect to a data-
+base with the same name, and a database user with a name that matches the operating system on a local connection. Ex-plicitly, the connection could have been requested as follows:
+
+```bash
+postgres@716d46d91c8d:~$ psql -U postgres -d postgres
+psql (17.2 (Debian 17.2-1.pgdg110+1))
+Type "help" for help.
+
+postgres=# 
+```
+
+* The first thing to note is that once a connection has been established, the command prompt
+changes: `psql` reports the database to which the user has been connected (`postgres`) and a sign
+to indicate they are a superuser (`#`). In the case that the user is not a database administrator, a `>`
+sign is placed at the end of the prompt.
+
+* If you need to connect to a database that is named differently by your operating system username,
+you need to specify it:
+
+```bash
+postgres@716d46d91c8d:~$ psql -d template1
+psql (17.2 (Debian 17.2-1.pgdg110+1))
+Type "help" for help.
+
+template1=# 
+```
+
+---------------
+
+* SQL is a case-insensitive language, so you can enter statements in either uppercase, lowercase, or a mix. The same rule applies to column names, which are case-insen-sitive. If you need to have identifiers with specific cases, you need to quote them in double quotes.
+
+
+---------------
+
+* One useful feature of the `psql` query buffer is the capability to edit the content of the query buf-
+fer in an external editor. If you issue the `\e` command, your favorite editor will pop up with the content of the last-edited query. You can then edit and refine your SQL statement as much as you want, and once you exit the editor, `psql` will read what you have produced and execute it. The editor to use is chosen with the EDITOR operating system environment variable.
+
+* It is also possible to execute all the statements included in a file or edit a file before executing it. To execute the file use `\i` command as follows:
+
+```bash
+template1=> \i test.sql
+```
+
+To edit the file use `\e` command followed by the file name.
+
+---------------
+
+
+## Exploring the disk layout of PGDATA
+
+The PGDATA directory acts as the disk container that stores all the data of the cluster, including
+the users’ data and cluster configuration.
+
+```bash
+postgres@716d46d91c8d:/$ ls -l /var/lib/postgresql/data/
+total 1859624
+drwx------ 17 postgres postgres       4096 Jan 19 13:00 base
+-rw-rw-r--  1 postgres root      337487947 Dec 27 07:14 central-zone-latest.osm.pbf
+drwx------  2 postgres postgres       4096 Jan 24 02:37 global
+-rw-r--r--  1 postgres root     1566617660 Dec 29 01:47 india-latest.osm.pbf
+drwx------  2 postgres postgres       4096 Dec 25 12:02 pg_commit_ts
+drwx------  2 postgres postgres       4096 Dec 25 12:02 pg_dynshmem
+-rw-------  1 postgres postgres       5743 Dec 25 12:02 pg_hba.conf
+-rw-------  1 postgres postgres       2640 Dec 25 12:02 pg_ident.conf
+drwx------  4 postgres postgres       4096 Jan 24 02:30 pg_logical
+drwx------  4 postgres postgres       4096 Dec 25 12:02 pg_multixact
+drwx------  2 postgres postgres       4096 Dec 25 12:02 pg_notify
+drwx------  2 postgres postgres       4096 Dec 25 12:02 pg_replslot
+drwx------  2 postgres postgres       4096 Dec 25 12:02 pg_serial
+drwx------  2 postgres postgres       4096 Dec 25 12:02 pg_snapshots
+drwx------  2 postgres postgres       4096 Jan 21 09:12 pg_stat
+drwx------  2 postgres postgres       4096 Dec 25 12:02 pg_stat_tmp
+drwx------  2 postgres postgres       4096 Dec 25 12:02 pg_subtrans
+drwx------  2 postgres postgres       4096 Dec 25 12:02 pg_tblspc
+drwx------  2 postgres postgres       4096 Dec 25 12:02 pg_twophase
+-rw-------  1 postgres postgres          3 Dec 25 12:02 PG_VERSION
+drwx------  4 postgres postgres       4096 Jan 18 16:00 pg_wal
+drwx------  2 postgres postgres       4096 Dec 25 12:02 pg_xact
+drwxrwxr-x 20 postgres root           4096 Jan 15 02:29 postgis_in_action_3e_code_data
+-rw-------  1 postgres postgres         88 Dec 25 12:02 postgresql.auto.conf
+-rw-------  1 postgres postgres      30777 Dec 25 12:02 postgresql.conf
+-rw-------  1 postgres postgres         36 Jan 24 01:25 postmaster.opts
+-rw-------  1 postgres postgres         94 Jan 24 02:30 postmaster.pid
+postgres@716d46d91c8d:/$ 
+```
+
+### Objects in the PGDATA directory
+
+PostgreSQL does not name objects on disk, such as tables, in a mnemonic or human-readable
+way; instead, every file is named after a numeric identifier. You can see this by having a look, for
+instance, at the base subdirectory:
+
+```bash
+postgres@716d46d91c8d:/$ ls -l /var/lib/postgresql/data/base/
+total 116
+drwx------ 2 postgres postgres  4096 Jan 24 02:30 1
+drwx------ 2 postgres postgres 12288 Jan 24 01:26 101617
+drwx------ 2 postgres postgres 12288 Dec 27 07:16 16384
+drwx------ 2 postgres postgres 12288 Jan 24 01:26 19725
+drwx------ 2 postgres postgres 12288 Jan 24 01:26 20883
+drwx------ 2 postgres postgres 12288 Jan 24 01:26 33608
+drwx------ 2 postgres postgres  4096 Jan 24 02:30 4
+drwx------ 2 postgres postgres 12288 Jan 24 02:37 5
+drwx------ 2 postgres postgres 12288 Jan 24 02:30 765180
+drwx------ 2 postgres postgres  4096 Jan 18 03:50 773395
+drwx------ 2 postgres postgres  4096 Jan 18 03:50 773396
+drwx------ 2 postgres postgres  4096 Jan 18 03:51 773397
+drwx------ 2 postgres postgres  4096 Jan 24 01:26 773401
+drwx------ 2 postgres postgres  4096 Jan 24 01:26 773416
+drwx------ 2 postgres postgres  4096 Jan 15 03:09 pgsql_tmp
+```
+
+Most of the entries here represent a database.
+
+There is a specific utility that allows you to inspect a `PGDATA` directory and extract mnemonic
+names: `oid2name`. For example, if you executed the `oid2name` utility, you’d get a list of all available
+databases similar to the following one.
+
+```bash
+postgres@716d46d91c8d:/$ oid2name 
+All databases:
+     Oid      Database Name  Tablespace
+---------------------------------------
+  773395                 KB  pg_default
+   33608              india  pg_default
+  101617             india2  pg_default
+  773397                 kb  pg_default
+  773396                 mk  pg_default
+  773416          myforumdb  pg_default
+  765180  postgis_in_action  pg_default
+       5           postgres  pg_default
+  773401           proj1_db  pg_default
+   19725         sdb_course  pg_default
+       4          template0  pg_default
+       1          template1  pg_default
+   16384   template_postgis  pg_default
+   20883                tmp  pg_default
+postgres@716d46d91c8d:/$ 
+```
+
+Note that `oid2name` queries the catalog tables to get all these details. From the above listing we can conclude that all the data associated with table `postgis_in_action` is stored in directory `765180`.
+
+We can list the files that constitutes the `postgis_in_action` db as follows:
+
+```bash
+postgres@716d46d91c8d:/$ ls -il /var/lib/postgresql/data/base/765180
+total 49800
+30698246 -rw------- 1 postgres postgres     8192 Jan 14 15:25 112
+30698248 -rw------- 1 postgres postgres     8192 Jan 14 15:25 113
+30676049 -rw------- 1 postgres postgres   131072 Jan 15 03:06 1247
+30676066 -rw------- 1 postgres postgres    24576 Jan 14 15:26 1247_fsm
+30676067 -rw------- 1 postgres postgres     8192 Jan 14 15:26 1247_vm
+30698277 -rw------- 1 postgres postgres   466944 Jan 15 03:11 1249
+...
+```
+
+Note: Listing is trimmed to save space.
+
+You can even go further and inspect a single file going into the database directory, specifying the
+database where you are going to search for an object name with the `-d` flag:
+
+```bash
+postgres@716d46d91c8d:/$ oid2name -d postgis_in_action -f 112
+From database "postgis_in_action":
+  Filenode                         Table Name
+---------------------------------------------
+       112  pg_foreign_data_wrapper_oid_index
+postgres@716d46d91c8d:/$ 
+```
+
 
 
