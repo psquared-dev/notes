@@ -378,7 +378,15 @@ Data Pages in Table Files
         * And so on.
 
 
+### CTIDs
 
+A CTID is a system column in PostgreSQL that uniquely identifies a row's physical location in a table.
 
+```text
+(block_number, tuple_index)
+```
 
+CTIDs are not explicitly visible unless queried, but they exist internally in every table. If a row is stored in block 42 and is the 5th row in that block, its CTID will be (42, 5).
+
+![file segment](./images/file-segment.png)
 
