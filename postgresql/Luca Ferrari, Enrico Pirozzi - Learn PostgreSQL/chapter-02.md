@@ -336,5 +336,49 @@ From database "postgis_in_action":
 postgres@716d46d91c8d:/$ 
 ```
 
+We can also find the filename associated with the database object using the following query:
+
+```sql
+postgis_in_action=# SELECT relfilenode, relname, relkind FROM pg_class WHERE relname = 'restaurants';
+ relfilenode |   relname   | relkind 
+-------------+-------------+---------
+      766269 | restaurants | r
+(1 row)
+```
+
+A table's main data is stored in a single file if the table size is under 1 GB. For larger tables, PostgreSQL splits the data into multiple segment files, each up to 1 GB:
+
+* 766263 (main file for the table)
+* 766263.1, 766263.2, ... (additional segments for larger tables)
+
+The data pages of the table will be present inside these files (766263.1, 766263.2, etc.). PostgreSQL divides table data into 8 KB pages by default, and these pages are distributed across the files for the table.
+
+Here’s how it works:
+
+Data Pages in Table Files
+
+1. Page Structure:
+    * Each table in PostgreSQL is stored as a sequence of 8 KB pages.
+    * These pages contain:
+        * Table rows (tuples).
+        * Metadata (e.g., header info for rows, free space tracking).
+
+1. File Segments:
+    * If the table is large enough to exceed 1 GB, PostgreSQL automatically splits it into file segments.
+    * For a table with a filenode 766263:
+        * The first 1 GB of data is stored in 766263.
+        * The next 1 GB is stored in 766263.1.
+        * The next 1 GB is stored in 766263.2, and so on.
+
+1. How Data is Organized:
+    * The data pages are sequentially allocated across these files.
+    * For example:
+        * Page 0 to Page 131072 (each 8 KB, totaling 1 GB) → stored in 766263.
+        * Page 131073 to Page 262144 → stored in 766263.1.
+        * And so on.
+
+
+
+
 
 
