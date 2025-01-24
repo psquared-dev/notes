@@ -390,3 +390,95 @@ CTIDs are not explicitly visible unless queried, but they exist internally in ev
 
 ![file segment](./images/file-segment.png)
 
+#### If no custom tablespaces are created:
+
+PostgreSQL pretends to find all its data within the PGDATA directory, but that does not mean that
+your cluster is “jailed” in this directory. In fact, PostgreSQL allows “escaping” the PGDATA directory
+by means of tablespaces. A tablespace is a directory that can be outside the PGDATA directory and
+can also belong to different storage. Tablespaces are mapped into the PGDATA directory by means
+of symbolic links stored in the `pg_tblspc` subdirectory. In this way, the PostgreSQL processes do
+not have to look outside `PGDATA`, but are still able to access “external” storage. A tablespace can
+be used to achieve different aims, such as enlarging the storage data or providing different stor-
+age performances for specific objects. For instance, you can create a tablespace on a slow disk to
+contain infrequently accessed objects and tables, keeping fast storage within another tablespace
+for frequently accessed objects.
+
+* `pg_default` is the default tablespace corresponding to “none,” the default storage to be
+used for every object when nothing is explicitly specified. In other words, every object
+stored directly under the PGDATA directory is attached to the pg_default tablespace.
+* `pg_global` is the tablespace used for system-wide objects.
+
+All data (e.g., table files, indexes, etc.) is stored in the default tablespaces:
+
+* `pg_default`: Stored in `/var/lib/postgresql/data/base/`
+* `pg_global`: Stored in `/var/lib/postgresql/data/global/`
+
+To view all tablespaces execute this command:
+
+```bash
+postgres@716d46d91c8d:/$ ls -il /var/lib/postgresql/data/pg_tblspc/
+total 0
+postgres@716d46d91c8d:/$ 
+```
+
+Empty listing indicates that there are no user-defined tablespaces created on the system.
+
+To view the files associated with tablespaces execute this:
+
+```bash
+postgres@716d46d91c8d:/$ oid2name -s
+All tablespaces:
+   Oid  Tablespace Name
+-----------------------
+  1663       pg_default
+  1664        pg_global
+postgres@716d46d91c8d:/$ 
+```
+
+
+### Exploring configuration files and parameters
+
+The main configuration file for PostgreSQL is postgresql.conf, a text-based file that drives the
+cluster when it starts.
+
+Usually, when changing the configuration of the cluster, you must edit the postgresql.conf file
+to write the new settings and, depending on the context of the settings you have edited, to issue
+a cluster `SIGHUP` signal (that is, reload the configuration) or restart it.
+
+Every configuration parameter is associated with a context, and depending on the context, you
+can apply changes with or without a cluster restart. Available contexts are as follows:
+
+* internal: A group of parameters that are set at compile time and therefore cannot be changed at runtime.
+
+* postmaster: All the parameters that require the cluster to be restarted (that is, to kill the postmaster process and start it again) to activate them.
+
+* sighup: All the configuration parameters that can be applied with a SIGHUP signal sent to the postmaster process, which is equivalent to issuing a reload signal in the operating system service manager.
+
+* backend and superuser-backend: All the parameters that can be set at runtime but will be applied to the next normal or administrative connection.
+
+* user and superuser: A group of settings that can be changed at runtime and are immediately active for normal and administrative connection.
+
+You can query the `pg_settings` system catalog to determine the context of any parameter:
+
+```sql
+SELECT name, context, setting, source
+FROM pg_settings;
+```
+
+#### postgresql.auto.conf
+
+The `postgresql.auto.conf` file in PostgreSQL is a configuration file that stores runtime configuration changes made using the `ALTER SYSTEM` command. This file allows you to persist changes to PostgreSQL's configuration parameters without directly editing the primary `postgresql.conf` file.
+
+Example:
+
+```bash
+postgis_in_action=# ALTER SYSTEM SET work_mem = '64MB';
+```
+
+This adds the following line to `postgresql.auto.conf`:
+
+```text
+work_mem = '64MB'
+```
+
+
