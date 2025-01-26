@@ -225,5 +225,194 @@ As you can see, there is a directory called 773428; its name is exactly the same
 `pg_database` catalog.
 
 
+### Managing tables
+
+#### Managing temporary tables
+
+Later in this book, we will explore sessions, transactions, and concurrency in more depth. For
+now, you simply need to know that a session is a set of transactions, each session is isolated, and
+that a transaction is isolated from everything else. In other words, anything that happens inside
+the transaction cannot be seen from outside the transaction until the transaction ends. Due to
+this, we might need to create a data structure that is visible only within the transaction that is
+running. In order to do this, we have to use the temp option.
+
+We will now explore two possibilities. The first possibility is that we could have a table visible
+only in the session where it was created. The second is that we might have a table visible in the
+same transaction where it was created.
+
+The following is an example of the first possibility where there is a table visible within the session:
+
+```sql
+forumdb=> create temp table if not exists temp_users
+pk int GENERATED ALWAYS AS IDENTITY
+,username text NOT NULL
+,gecos text
+,email text NOT NULL
+,PRIMARY KEY( pk )
+,UNIQUE ( username )
+);
+CREATE TABLE
+```
+
+The preceding command will create the `temp_users` table, which will only be visible within the
+session where the table was created.
+
+If instead we wanted to have a table visible only within our transaction, then we would have to
+add the `on commit drop` options. To do this, we would have to do the following:
+
+1. Start a new transaction.
+1. Create the `temp_users` table.
+1. Commit or roll back the transaction started in Step 1.
+
+Let’s start with Step 1:
+
+1. Start the transaction with the following code:
+
+```sql
+forumdb=> begin work;
+BEGIN
+forumdb=*>
+```
+
+The `*` symbol means that we are inside a transaction block.
+
+2. Create a table visible only inside the transaction:
+
+```sql
+forumdb=*> create temp table if not exists temp_users_transaction (
+pk int GENERATED ALWAYS AS IDENTITY
+,username text NOT NULL
+,gecos text
+,email text NOT NULL
+,PRIMARY KEY( pk )
+,UNIQUE ( username )
+) on commit drop;
+CREATE TABLE
+```
+
+Now check that the table is present inside the transaction and not outside the transaction:
+
+```sql
+forumdb=*> \d temp_users_transaction
+Table "pg_temp_3.temp_users_transaction"
+Column| Type | Collation | Nullable | Default
+----------+---------+-----------+----------+------------------------------
+pk identity | integer |     | not null | generated always as  identity
+username | text|    | not null | 
+gecos| text|        |
+email| text|        | not null ||
+Indexes:
+"temp_users_transaction_pkey" PRIMARY KEY, btree (pk)
+"temp_users_transaction_username_key" UNIQUE CONSTRAINT, btree
+(username)
+```
+
+3. You can see the structure of the temp_users_transaction table, so now commit the trans-
+action:
+
+```sql
+forumdb=*> commit work;
+COMMIT
+```
+
+If you re-execute the `DESCRIBE` command `\d temp_users_transaction`, PostgreSQL responds in this way:
+
+```sql
+forumdb=> \d temp_users_transaction
+Did not find any relation named "temp_users_transaction".
+```
+
+This happens because the `on commit drop` option drops the table once the transaction is completed.
+
+
+### Managing unlogged tables
+
+We will now address the topic of unlogged tables. For now, we will simply note that unlogged
+tables are much faster than classic tables (also known as logged tables) but are not crash-safe.
+This means that the consistency of the data is not guaranteed in the event of a crash.
+
+The following snippet shows how to create an unlogged table:
+
+```sql
+forumdb=> create unlogged table if not exists unlogged_users (
+pk int GENERATED ALWAYS AS IDENTITY
+,username text NOT NULL
+,gecos text
+,email text NOT NULL
+,PRIMARY KEY( pk )
+,UNIQUE ( username )
+);
+CREATE TABLE
+```
+
+Unlogged tables are a fast alternative to permanent and temporary tables. This per-
+formance increase comes at the expense of losing data in the event of a server crash.
+If the server crashes after the reboot, the table will be empty. This is something you
+may be able to afford under certain circumstances.
+
+
+### Creating a table
+
+We will now explore what happens behind the scenes when a new table is created. Also, for tables,
+PostgreSQL assigns an object identifier called an OID. We have already seen oid2name in Chapter
+2, Getting to know your cluster. Now we will see something similar. An OID is simply a number that
+internally identifies an object inside a PostgreSQL cluster. Let’s now see the relationship between
+the tables created at the SQL level and what happens behind the scenes in the filesystem:
+
+1. To do this, we will use the OIDs and a system table called pg_class, which collects in-
+formation about all the tables that are present in the database. So, let’s run this query:
+
+```sql
+forumdb=> select oid,relname from pg_class where relname='users';
+oid    | relname
+-------+---------
+16389  | users
+(1 row)
+```
+
+Here, the `oid` field is the object identifier field, and `relname` represents the relation name
+of the object. As seen here, the `forumdb` database is stored in the `16389` directory.
+
+2. Now, let’s see where the `users` table is stored. To do this, go to the `16386` directory using
+the following code:
+
+```bash
+postgres@learn_postgresql:~$ cd /var/lib/postgresql/16/main/
+base/16386
+```
+
+3. Once here, execute the following command:
+
+```bash
+postgres@learn_postgresql:~/data/base/16386$ ls -l | grep 16389
+-rw------- 1 postgres postgres 0 Jan 3 09:13 16389
+```
+
+As you can see, in the directory `16386`, there is a file called `16389`. In PostgreSQL, each table is
+stored in one or more files. If the table size is less than 1 GB, then the table will be stored in a sin-
+gle file. If the table has a size greater than 1 GB, then the table will be stored in two files and the
+second file will be called `16389.1`. If the users table has a size greater than 2 GB, then the table
+will be stored in three files, called `16389`, `16389.1`, and `16389.2`; the same thing happens for the
+`users_username_key` index.
+
+### Understanding basic table manipulation statements
+
+#### Creating a table starting from another table
+
+We will now examine how to create a new table using data from another table. To do this, you
+need to create a temporary table with the data present in the categories table as follows:
+
+```sql
+forumdb=> create temp table temp_categories as select * from categories;
+SELECT 6
+```
+
+This command creates a table called `temp_data` with the same data structure and data as the
+table called `categories`.
+
+
+
+
+
 
 
