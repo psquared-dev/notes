@@ -53,5 +53,6 @@ p.category=c.pk where p.category is null
 As shown here, we get the same result we had using the `NOT EXISTS` or `NOT IN` condition.
 
 
+## NULL are greater
 
-
+By default `NULL`s are treated as larger than any other value.
