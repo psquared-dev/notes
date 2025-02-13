@@ -28,9 +28,7 @@ order by age
 
 1. The following is the order in which SQL clause are executed:
 
-```sql
-from | where | select | order by
-```
+![Alt text](./images/sql-query-order-of-operations.png)
 
 1. `fetch` clause is an alternative to `limit` clause. Here is an example:
 
