@@ -140,7 +140,7 @@ mov [0x0000000712], 10
     * Now that address (`0x0000000712`) is a virtual address.
     * On Windows/Linux user-space, low memory (below `0x10000` typically) is reserved and not mapped.
     * So when your instruction executes, the CPU will raise a segmentation fault / access violation.
-
+    
 **Note:** In Read Mode, there is no concept of paging or virtual memory, all addresses are treated as physical addresses.
 
 ### Variable Declaration
@@ -187,7 +187,7 @@ Rule 3: You can’t have both operands be memory
 SUB Destination, Source
 ```
 Same rules as `ADD` instruction.
-
+ 
 ## MUL Instruction
 
 The Assembly `MUL` instruction can be used to multiply an unsigned value in a register or a memory variable. 
@@ -197,7 +197,7 @@ The `MUL` instruction requires just one operand and has this syntax:
 MUL Multiplier
 ```
 
-Multiplier – a register name or a memory variable containing the number by which to multiply a multiplicand.
+Multiplier: a register name or a memory variable containing the number by which to multiply a multiplicand.
 
 The multiplicand (number to be multiplied) should be placed in a specific register matching the multiplier’s size. 
 The multiplication process places the upper half and lower half of the result in two specific registers – the result 
@@ -228,12 +228,14 @@ Most assemblers (MASM/NASM) will error out, because `MUL` only supports reg or m
 DIV Divisor
 ```
 
-| Operand size | Dividend (double size) | Quotient SAL | Remainder |
-|--------------|------------------------|--------------|-----------|
-| **8-bit**    | AX                     | AL           | AH        |
-| **16-bit**   | DX:AX                  | AX           | DX        |
-| **32-bit**   | EDX:EAX                | EAX          | EDX       |
-| **64-bit**   | RDX:RAX                | RAX          | RDX       |
+Divisor: a register name or a memory variable containing the number by which to divide a dividend.
+
+| Operand size | Dividend (double size) | Quotient | Remainder |
+|--------------|------------------------|----------|-----------|
+| **8-bit**    | AX                     | AL       | AH        |
+| **16-bit**   | DX:AX                  | AX       | DX        |
+| **32-bit**   | EDX:EAX                | EAX      | EDX       |
+| **64-bit**   | RDX:RAX                | RAX      | RDX       |
 
 From the above table, we can conclude that if divisor is 32 bits then the values in `EDX` and `EAX` will be 
 concatenated and quotient will be placed in `EAX` and remainder in `EDX`.
