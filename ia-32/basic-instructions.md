@@ -1,3 +1,27 @@
+
+## Table of Contents
+- [Data Units](#data-units)
+- [General Purpose Registers \(x86-64 bit views\)](#general-purpose-registers-x86-64-bit-views)
+- [Function Arguments \(Windows x64 Calling Convention\)](#function-arguments-windows-x64-calling-convention)
+- [Function Return Value](#function-return-value)
+- [Register Purpose](#register-purpose)
+- [Where can I move data from and to?](#where-can-i-move-data-from-and-to)
+- [MOV Instruction](#mov-instruction)
+- [ADD Instruction](#add-instruction)
+- [Sub Instruction](#sub-instruction)
+- [MUL Instruction](#mul-instruction)
+- [DIV Instruction](#div-instruction)
+- [IMUL Instruction - Multiplying Signed Numbers](#imul-instruction---multiplying-signed-numbers)
+- [IDIV Instruction - Dividing Signed Numbers](#idiv-instruction---dividing-signed-numbers)
+- [Shifting Bits](#shifting-bits)
+- [Rotating Bits](#rotating-bits)
+- [Flags](#flags)
+- [Testing Bit Values](#testing-bit-values)
+- [Comparing Values](#comparing-values)
+- [Addressing Options](#addressing-options)
+- [push value](#push-value)
+- [pop register](#pop-register)
+
 ## Data Units
 
 *	BYTE – Byte (8-bits) range 0-255, or -128 to 127
@@ -7,25 +31,24 @@
 
 ## General Purpose Registers (x86-64 bit views)
 
-| 64-bit  | 32-bit | 16-bit | 8-bit High | 8-bit Low |
-| ------- | ------ | ------ | ---------- | --------- |
-| **RAX** | EAX    | AX     | AH         | AL        |
-| **RBX** | EBX    | BX     | BH         | BL        |
-| **RCX** | ECX    | CX     | CH         | CL        |
-| **RDX** | EDX    | DX     | DH         | DL        |
-| **RSI** | ESI    | SI     | —          | SIL       |
-| **RDI** | EDI    | DI     | —          | DIL       |
-| **RBP** | EBP    | BP     | —          | BPL       |
-| **RSP** | ESP    | SP     | —          | SPL       |
-| **R8**  | R8D    | R8W    | —          | R8B       |
-| **R9**  | R9D    | R9W    | —          | R9B       |
-| **R10** | R10D   | R10W   | —          | R10B      |
-| **R11** | R11D   | R11W   | —          | R11B      |
-| **R12** | R12D   | R12W   | —          | R12B      |
-| **R13** | R13D   | R13W   | —          | R13B      |
-| **R14** | R14D   | R14W   | —          | R14B      |
-| **R15** | R15D   | R15W   | —          | R15B      |
-
+| 64-bit | 32-bit | 16-bit | 8-bit High | 8-bit Low |
+|--------|--------|--------|------------|-----------|
+| RAX    | EAX    | AX     | AH         | AL        |
+| RBX    | EBX    | BX     | BH         | BL        |
+| RCX    | ECX    | CX     | CH         | CL        |
+| RDX    | EDX    | DX     | DH         | DL        |
+| RSI    | ESI    | SI     | —          | SIL       |
+| RDI    | EDI    | DI     | —          | DIL       |
+| RBP    | EBP    | BP     | —          | BPL       |
+| RSP    | ESP    | SP     | —          | SPL       |
+| R8     | R8D    | R8W    | —          | R8B       |
+| R9     | R9D    | R9W    | —          | R9B       |
+| R10    | R10D   | R10W   | —          | R10B      |
+| R11    | R11D   | R11W   | —          | R11B      |
+| R12    | R12D   | R12W   | —          | R12B      |
+| R13    | R13D   | R13W   | —          | R13B      |
+| R14    | R14D   | R14W   | —          | R14B      |
+| R15    | R15D   | R15W   | —          | R15B      |
 
 ```text
 64-bit: RAX
@@ -70,21 +93,21 @@ Any arguments beyond the 4th are passed on the stack.
 
 ## Register Purpose
 
-| Register    | Historical name   | Typical role                               | Calling convention (Windows x64) | Volatility   |
-| ----------- | ----------------- | ------------------------------------------ | -------------------------------- | ------------ |
-| **RAX**     | Accumulator       | Arithmetic, multiply/divide, return values | Function **return value**        | Volatile     |
-| **RBX**     | Base              | Loop/index, general storage                | Callee-saved                     | Non-volatile |
-| **RCX**     | Counter           | Used in loops (`LOOP`), string ops         | **1st function argument**        | Volatile     |
-| **RDX**     | Data              | Used in I/O ops, multiply/divide remainder | **2nd function argument**        | Volatile     |
-| **RSI**     | Source Index      | String source pointer                      | Callee-saved                     | Non-volatile |
-| **RDI**     | Destination Index | String destination pointer                 | Callee-saved                     | Non-volatile |
-| **RBP**     | Base Pointer      | Frame pointer (stack frame)                | Callee-saved                     | Non-volatile |
-| **RSP**     | Stack Pointer     | Points to top of stack                     | Special (stack mgmt)             | Non-volatile |
-| **R8**      | —                 | Extra argument                             | **3rd function argument**        | Volatile     |
-| **R9**      | —                 | Extra argument                             | **4th function argument**        | Volatile     |
-| **R10**     | —                 | Scratch / syscall #                        | Temp                             | Volatile     |
-| **R11**     | —                 | Scratch / flags save                       | Temp                             | Volatile     |
-| **R12–R15** | —                 | Extra general storage                      | Callee-saved                     | Non-volatile |
+| Register | Historical name   | Typical role                               | Calling convention (Windows x64) | Volatility   |
+|----------|-------------------|--------------------------------------------|----------------------------------|--------------|
+| RAX      | Accumulator       | Arithmetic, multiply/divide, return values | Function **return value**        | Volatile     |
+| RBX      | Base              | Loop/index, general storage                | Callee-saved                     | Non-volatile |
+| RCX      | Counter           | Used in loops (`LOOP`), string ops         | **1st function argument**        | Volatile     |
+| RDX      | Data              | Used in I/O ops, multiply/divide remainder | **2nd function argument**        | Volatile     |
+| RSI      | Source Index      | String source pointer                      | Callee-saved                     | Non-volatile |
+| RDI      | Destination Index | String destination pointer                 | Callee-saved                     | Non-volatile |
+| RBP      | Base Pointer      | Frame pointer (stack frame)                | Callee-saved                     | Non-volatile |
+| RSP      | Stack Pointer     | Points to top of stack                     | Special (stack mgmt)             | Non-volatile |
+| R8       | —                 | Extra argument                             | **3rd function argument**        | Volatile     |
+| R9       | —                 | Extra argument                             | **4th function argument**        | Volatile     |
+| R10      | —                 | Scratch / syscall #                        | Temp                             | Volatile     |
+| R11      | —                 | Scratch / flags save                       | Temp                             | Volatile     |
+| R12–R15  | —                 | Extra general storage                      | Callee-saved                     | Non-volatile |
 
 ## Where can I move data from and to?
 
@@ -103,37 +126,72 @@ MOV     Destination , Source
 * Destination – a register name, or a memory variable.
 * Source – a register name, a memory variable, or an "immediate" operand – typically a numeric value.
 
-It is important to recognize that both operands must be of the same size. Assigning a variable to a 64-bit register therefore requires the variable to be 64 bits in size - a quad word.
+It is important to recognize that both operands must be of the same size. Assigning a variable to a 64-bit register 
+therefore requires the variable to be 64 bits in size - a quad word.
+
+Example of invalid instruction:
+
+```text
+mov [0x0000000712], 10
+```
+
+* In Real Mode, this would directly write the byte `0x0A` into physical memory address `0x0712`.
+* In Protected Mode:
+    * Now that address (`0x0000000712`) is a virtual address.
+    * On Windows/Linux user-space, low memory (below `0x10000` typically) is reserved and not mapped.
+    * So when your instruction executes, the CPU will raise a segmentation fault / access violation.
+
+**Note:** In Read Mode, there is no concept of paging or virtual memory, all addresses are treated as physical addresses.
 
 ### Variable Declaration
 
-Variables must be declared in the data section of the Assembly code by specifying a name of your choice, the data allocation size, and an initial value, with this syntax:
+Variables must be declared in the data section of the Assembly code by specifying a name of your choice, the data 
+allocation size, and an initial value, with this syntax:
 
 ```text
 Variable-name     Data-allocation     Initial-value
 ```
 
-The variable name can begin with any letter `A-Z` (in uppercase or lowercase) or any of the characters `@_$?`. The remainder of the name can contain any of those characters and numbers `0-9`. Variable names throughout this book are lowercase, to easily distinguish them from the register names in all uppercase.
+The variable name can begin with any letter `A-Z` (in uppercase or lowercase) or any of the characters `@_$?`. 
+The remainder of the name can contain any of those characters and numbers `0-9`. Variable names throughout this book 
+are lowercase, to easily distinguish them from the register names in all uppercase.
 
 ### Variable Initialization
 
-An initial value is typically specified in the variable declaration, but can be replaced by a ? question mark character if the variable is to be initialized later in the program.
+An initial value is typically specified in the variable declaration, but can be replaced by a `?` question mark character 
+if the variable is to be initialized later in the program.
 
 ## ADD Instruction
 
 ```text
 ADD  Destination, Source
 ```
+Rule 1: Destination can be:
+
+* A register (RAX, RCX, etc.)
+* A memory location (variable, pointer, etc.)
+
+Rule 2: Source can be:
+
+* A register
+* A memory location
+* An immediate constant
+
+Rule 3: You can’t have both operands be memory
+
+* Because CPU can’t directly do mem + mem. At least one operand must be a register.
 
 ## Sub Instruction
 
 ```text
 SUB Destination, Source
 ```
+Same rules as `ADD` instruction.
 
 ## MUL Instruction
 
-The Assembly `MUL` instruction can be used to multiply an unsigned value in a register or a memory variable. The `MUL` instruction requires just one operand and has this syntax:
+The Assembly `MUL` instruction can be used to multiply an unsigned value in a register or a memory variable. 
+The `MUL` instruction requires just one operand and has this syntax:
 
 ```text
 MUL Multiplier
@@ -141,17 +199,28 @@ MUL Multiplier
 
 Multiplier – a register name or a memory variable containing the number by which to multiply a multiplicand.
 
-The multiplicand (number to be multiplied) should be placed in a specific register matching the multiplier’s size. The multiplication process places the upper half and lower half of the result in two specific registers – the result is twice the size of the multiplicand.
+The multiplicand (number to be multiplied) should be placed in a specific register matching the multiplier’s size. 
+The multiplication process places the upper half and lower half of the result in two specific registers – the result 
+is twice the size of the multiplicand.
 
-| Operand size | Multiplicand (implicit) | Result – Upper Half | Result – Lower Half          |
-| ------------ | ----------------------- | ------------------- | ---------------------------- |
-| **8-bit**    | **AL**                  | **AH**              | **AX (AL = low, AH = high)** |
-| **16-bit**   | **AX**                  | **DX**              | **AX**                       |
-| **32-bit**   | **EAX**                 | **EDX**             | **EAX**                      |
-| **64-bit**   | **RAX**                 | **RDX**             | **RAX**                      |
+| Operand size | Multiplicand (implicit) | Result  | Result – Upper Half | Result – Lower Half |
+|--------------|-------------------------|---------|---------------------|---------------------|
+| 8-bit        | AL                      | AX      | AH                  | AL                  |
+| 16-bit       | AX                      | DX:AX   | DX                  | AX                  |
+| 32-bit       | EAX                     | EDX:EAX | EDX                 | EAX                 |
+| 64-bit       | RAX                     | RDX:RAX | RDX                 | RAX                 |
 
 
-From the above table, it can be concluded that if multiplier is 32 bits then it would be multiples by `RAX` and the upper-half of the result would be in `RDX` and lower-half would be in `RAX`.
+From the above table, it can be concluded that if multiplier is 32 bits then it would be multiplied by `RAX` and 
+the upper-half of the result would be in `RDX` and lower-half would be in `RAX`.
+
+Invalid instruction example:
+
+```text
+MUL 4
+```
+
+Most assemblers (MASM/NASM) will error out, because `MUL` only supports reg or mem, not immediates.
 
 ## DIV Instruction
 
@@ -159,15 +228,15 @@ From the above table, it can be concluded that if multiplier is 32 bits then it 
 DIV Divisor
 ```
 
-| Operand size | Dividend (double size) | Quotient SAL| Remainder |
-| ------------ | ---------------------- | -------- | --------- |
-| **8-bit**    | AX                     | AL       | AH        |
-| **16-bit**   | DX:AX                 | AX       | DX        |
-| **32-bit**   | EDX:EAX               | EAX      | EDX       |
-| **64-bit**   | RDX:RAX               | RAX      | RDX       |
+| Operand size | Dividend (double size) | Quotient SAL | Remainder |
+|--------------|------------------------|--------------|-----------|
+| **8-bit**    | AX                     | AL           | AH        |
+| **16-bit**   | DX:AX                  | AX           | DX        |
+| **32-bit**   | EDX:EAX                | EAX          | EDX       |
+| **64-bit**   | RDX:RAX                | RAX          | RDX       |
 
-From the above table, we can conclude that if divisor is 32 bits then the values in `EDX` and `EAX` will be concatenated and quotient will be placed in `EAX` and remainder in `EDX`.
-
+From the above table, we can conclude that if divisor is 32 bits then the values in `EDX` and `EAX` will be 
+concatenated and quotient will be placed in `EAX` and remainder in `EDX`.
 
 ## IMUL Instruction - Multiplying Signed Numbers
 
