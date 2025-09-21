@@ -212,7 +212,7 @@ git rebase --onto main dev feature
 
 There are 3 main modes:
 
-1. git reset --soft <commit>
+1. `git reset --soft <commit>`
 
 * Moves the branch pointer back to <commit>.
 * Keeps all your changes staged
@@ -224,7 +224,7 @@ There are 3 main modes:
     Undo the last commit, but keep its changes staged (ready for recommit).
 
 
-2. git reset --mixed <commit> (default)
+2. `git reset --mixed <commit> (default)`
 
 * Moves the branch pointer back to <commit>.
 * Keeps changes in your working directory, but unstaged.
@@ -236,7 +236,7 @@ There are 3 main modes:
     Undo the last commit, keep changes in files, but not staged.
 
 
-3. git reset --hard <commit> 
+3. `git reset --hard <commit>`
 
 * Moves the branch pointer back to <commit>.
 * Discards all changes (both staged and unstaged) in your working directory.
